@@ -1,0 +1,26 @@
+# standard stuff
+.DS_Store
+.idea
+.pio
+
+# C++ binary stuff
+*.o
+bin
+
+# CMake stuff
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+cmake-build-*
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# python stuff
+__pycache__
+.pytest_cache
