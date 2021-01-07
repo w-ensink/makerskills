@@ -97,95 +97,6 @@ constexpr auto joyStickYPin = A1;
 constexpr auto joyStickButton = 2;
 
 
-struct SequencerDisplay
-{
-    static constexpr int numDisplays = 4;
-    static constexpr int numRows = 8;
-    static constexpr int numColumnsPerHardwareDisplay = 8;
-    static constexpr int numSequencerColumns = 32;
-
-    void setup()
-    {
-        for (int display = 0; display < numDisplays; display++)
-        {
-            ledController.shutdown (display, false);
-            ledController.setIntensity (display, 8);
-            ledController.clearDisplay (display);
-        }
-    }
-
-    void render()
-    {
-        clearScreen();
-
-        for (auto row = 0; row < numRows; ++row)
-        {
-            for (auto display = 0; display < ledController.getDeviceCount(); ++display)
-            {
-                for (auto column = 0; column < numColumnsPerHardwareDisplay; ++column)
-                {
-                    auto col = column + display * numColumnsPerHardwareDisplay;
-                    auto value = displayBuffer[row][col];
-                    ledController.setLed (display, row, 7 - column, value);
-                }
-            }
-        }
-    }
-
-    // clears the hardware screen, leaves display buffer untouched
-    void clearScreen()
-    {
-        for (auto display = 0; display < numDisplays; ++display)
-            ledController.clearDisplay (display);
-    }
-
-    // this addressing works row[0-8], column[0-32]
-    void turnLedOn (int row, int column)
-    {
-        displayBuffer[row][column] = true;
-    }
-
-    void turnLedOff (int row, int column)
-    {
-        displayBuffer[row][column] = false;
-    }
-
-    void turnRowOff (int row)
-    {
-        for (auto c = 0; c < numSequencerColumns; ++c)
-            turnLedOff (row, c);
-    }
-
-    void turnColumnOff (int col)
-    {
-        for (auto r = 0; r < numRows; ++r)
-            turnLedOff (r, col);
-    }
-
-    void turnColumnOn (int col)
-    {
-        for (auto r = 0; r < numRows; ++r)
-            turnLedOn (r, col);
-    }
-
-    void turnRowOn (int row)
-    {
-        for (auto c = 0; c < numSequencerColumns; ++c)
-            turnLedOn (row, c);
-    }
-
-    void turnOff()
-    {
-        for (auto row = 0; row < numRows; ++row)
-            for (auto c = 0; c < numSequencerColumns; ++c)
-                displayBuffer[row][c] = false;
-    }
-
-    bool displayBuffer[numRows][numColumnsPerHardwareDisplay * numDisplays] = {};
-    LedControl ledController { 12, 11, 10, numDisplays };
-};
-
-
 SequencerDisplay display;
 
 void setup()
@@ -265,9 +176,7 @@ struct JoyStick
         virtual void joyStickUpdate (JoyStick&, Direction) = 0;
     };
 
-    explicit JoyStick (const PinLayout& layout) : pinLayout (layout)
-    {
-    }
+    explicit JoyStick (const PinLayout& layout) : pinLayout (layout) {}
 
     void setup() const
     {
@@ -288,19 +197,26 @@ struct JoyStick
         auto buttonDown = (bool) digitalRead (pinLayout.buttonClickPin);
 
         auto absX = abs (xVal - halfRes);
-        auto absY = abs (xVal - halfRes);
+        auto absY = abs (yVal - halfRes);
 
-        if (absX > threshold)
+        if (absX > threshold || absY > threshold)
         {
             if (absY > absX)
-                direction = yVal > halfRes ? Direction::up : Direction::down;
+                direction = yVal <= halfRes ? Direction::up : Direction::down;
             else
-                direction = xVal > halfRes ? Direction::right : Direction::left;
+                direction = xVal <= halfRes ? Direction::right : Direction::left;
         }
 
         listener->joyStickUpdate (*this, direction);
     }
 
+
+    void setListener (Listener* l)
+    {
+        listener = l;
+    }
+
+private:
     const PinLayout pinLayout;
     Listener* listener = nullptr;
     static constexpr auto resolution = 1024;
@@ -360,9 +276,12 @@ private:
         spec.numDisplays
     };
 
-    void setStateOfPixel (const Pixel& pixel, bool state)
+    void setStateOfPixel (Pixel pixel, bool state)
     {
-        auto x = 7 - (pixel.x % 8);  //+ 32 * (pixel.x >= 32);
+        pixel.x = 15 - pixel.x;
+        pixel.y = 31 - pixel.y;
+
+        auto x = 7 - (pixel.x % 8);
         auto y = 7 - (pixel.y % 8);
         auto display = (pixel.y / 8) + (pixel.x / 8) * 4;
         ledController.setLed (display, x, y, state);
@@ -378,25 +297,94 @@ const auto displaySpec = Display_16x32::Spec {
     .numDisplays = numDisplays
 };
 
-auto display = Display_16x32 { displaySpec };
+const auto joyStickLeftLayout = JoyStick::PinLayout {
+    .analogXPin = A1,
+    .analogYPin = A0,
+    .buttonClickPin = 2
+};
+
+const auto joyStickRightLayout = JoyStick::PinLayout {
+    .analogXPin = A6,
+    .analogYPin = A5,
+    .buttonClickPin = 4
+};
+
+
+struct Snake : JoyStick::Listener
+{
+    Snake() = default;
+
+    void joyStickUpdate (JoyStick& joyStick, JoyStick::Direction direction) override
+    {
+        if (&joyStick == &leftJoyStick)
+        {
+            display.turnOffPixel (leftJoyStickPosition);
+            applyDirectionToPixel (direction, leftJoyStickPosition);
+            display.turnOnPixel (leftJoyStickPosition);
+        }
+
+        if (&joyStick == &rightJoyStick)
+        {
+            display.turnOffPixel (rightJoyStickPosition);
+            applyDirectionToPixel (direction, rightJoyStickPosition);
+            display.turnOnPixel (rightJoyStickPosition);
+        }
+    }
+
+    void setup()
+    {
+        leftJoyStick.setListener (this);
+        rightJoyStick.setListener (this);
+        leftJoyStick.setup();
+        rightJoyStick.setup();
+        display.setup();
+    }
+
+    void update()
+    {
+        leftJoyStick.update();
+        rightJoyStick.update();
+    }
+
+    static void applyDirectionToPixel (JoyStick::Direction direction, Display_16x32::Pixel& pixel)
+    {
+        if (direction == JoyStick::Direction::left)
+            pixel.x -= 1;
+        if (direction == JoyStick::Direction::right)
+            pixel.x += 1;
+        if (direction == JoyStick::Direction::up)
+            pixel.y += 1;
+        if (direction == JoyStick::Direction::down)
+            pixel.y -= 1;
+
+        if (pixel.y < 0)
+            pixel.y = 31;
+        if (pixel.y > 31)
+            pixel.y = 0;
+
+        if (pixel.x < 0)
+            pixel.x = 15;
+        if (pixel.x > 15)
+            pixel.x = 0;
+    }
+
+    Display_16x32 display { displaySpec };
+    JoyStick leftJoyStick { joyStickRightLayout };
+    JoyStick rightJoyStick { joyStickLeftLayout };
+    Display_16x32::Pixel leftJoyStickPosition { 0, 0 };
+    Display_16x32::Pixel rightJoyStickPosition { 0, 0 };
+};
+
+auto snake = Snake {};
 
 void setup()
 {
-    display.setup();
+    Serial.begin (9600);
+    snake.setup();
 }
 
 void loop()
 {
-    for (int x = 0; x < 16; ++x)
-    {
-        for (int y = 0; y < 32; ++y)
-        {
-            display.turnOnPixel ({ x, y });
-            delay (100);
-            display.turnOffPixel ({ x, y });
-            delay (100);
-        }
-    }
-
-    //display.turnOnPixel({ 0, 0});
+    snake.update();
+    delay (100);
 }
