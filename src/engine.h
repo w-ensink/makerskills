@@ -33,7 +33,7 @@ struct Engine
 
     void update()
     {
-        displayController.clearDisplay();
+        //displayController.clearDisplay();
         leftJoyStick.update();
         rightJoyStick.update();
     }

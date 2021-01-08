@@ -21,6 +21,16 @@ Direction oppositeDirection (Direction direction)
     return Direction::up;
 }
 
+bool isVerticalDirection (Direction d)
+{
+    return d == Direction::up || d == Direction::down;
+}
+
+bool isHorizontalDirection (Direction d)
+{
+    return d == Direction::left || d == Direction::right;
+}
+
 // =====================================================================================
 // TDD Point & Array: https://godbolt.org
 

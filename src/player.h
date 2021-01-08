@@ -33,11 +33,11 @@ struct Player : public Drawable
 
         if (currentDirection == oppositeDirection (other.currentDirection))
         {
-            if (head.x == other.head.x)
+            if (head.x == other.head.x && isVerticalDirection (currentDirection))
                 if (abs (head.y - other.head.y) == 1)
                     return true;
 
-            if (head.y == other.head.y)
+            if (head.y == other.head.y && isHorizontalDirection (currentDirection))
                 if (abs (head.x - other.head.x) == 1)
                     return true;
         }
@@ -51,7 +51,7 @@ struct Player : public Drawable
 
     bool ranIntoItself() const
     {
-        for (auto& p : tail)
+        for (auto p : tail)
             if (p == head)
                 return true;
 
@@ -88,6 +88,7 @@ struct Player : public Drawable
     {
         if (tail.getSize() > 0)
         {
+            Serial.println("has tail");
             decltype (tail) newTail {};
             newTail.append (head);
 

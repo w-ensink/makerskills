@@ -223,7 +223,7 @@ struct Snake : public Engine::Game, ContextSwitcher
                     dc.drawImage (images::arrowLeft);
                 if (snake.scoreBoard.winner == ScoreBoard::Winner::right)
                     dc.drawImage (images::arrowRight);
-                else
+                if (snake.scoreBoard.winner == ScoreBoard::Winner::none)
                     dc.drawImage (images::doubleArrow);
             }
         }

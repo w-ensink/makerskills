@@ -60,8 +60,6 @@ struct JoyStick
 
         if (buttonDown)
             listener->joyStickButtonDown (*this);
-
-        Serial.println (buttonDown);
     }
 
 
