@@ -2,6 +2,7 @@
 #pragma once
 
 #include "engine.h"
+#include "images.h"
 #include "player.h"
 
 struct ContextSwitcher;
@@ -74,6 +75,9 @@ struct Snake : public Engine::Game, ContextSwitcher
             snake.engine.getLeftJoyStick().setListener (this);
             snake.engine.getRightJoyStick().setListener (this);
 
+            leftPlayer.removeTail();
+            rightPlayer.removeTail();
+
             generateNewFoodPosition();
         }
 
@@ -81,19 +85,22 @@ struct Snake : public Engine::Game, ContextSwitcher
         {
             leftPlayer.update();
             rightPlayer.update();
-            /*
-            auto leftRanIntoRight = leftPlayer.ranIntoOther (rightPlayer);
-            auto rightRanIntoLeft = rightPlayer.ranIntoOther (leftPlayer);
 
-            auto leftRanIntoItself = leftPlayer.ranIntoItself();
-            auto rightRanIntoItself = rightPlayer.ranIntoItself();*/
+            //auto leftRanIntoRight = leftPlayer.ranIntoOther (rightPlayer);
+            // auto rightRanIntoLeft = rightPlayer.ranIntoOther (leftPlayer);
+
+            if (leftPlayer.ranIntoItself())
+                snake.switchContextTo (&snake.menuContext);
+
+            if (rightPlayer.ranIntoItself())
+                snake.switchContextTo (&snake.menuContext);
 
             if (leftPlayer.canGrabFood (food))
             {
                 leftPlayer.increaseTail();
                 generateNewFoodPosition();
             }
-            if (rightPlayer.canGrabFood(food))
+            if (rightPlayer.canGrabFood (food))
             {
                 rightPlayer.increaseTail();
                 generateNewFoodPosition();
@@ -104,7 +111,7 @@ struct Snake : public Engine::Game, ContextSwitcher
 
         void draw (DisplayController& dc) override
         {
-            food.draw(dc);
+            food.draw (dc);
             leftPlayer.draw (dc);
             rightPlayer.draw (dc);
         }
@@ -129,6 +136,12 @@ struct Snake : public Engine::Game, ContextSwitcher
     {
         explicit MenuContext (Snake& s) : snake { s } {}
 
+        void onContextEnter() override
+        {
+            snake.engine.getRightJoyStick().setListener (this);
+            snake.engine.getLeftJoyStick().setListener (this);
+        }
+
         void joyStickUpdate (JoyStick&, Direction) override {}
 
         void joyStickButtonDown (JoyStick&) override
@@ -136,12 +149,19 @@ struct Snake : public Engine::Game, ContextSwitcher
             snake.switchContextTo (&snake.inGameContext);
         }
 
+        void update() override
+        {
+            ++frame;
+        }
+
         void draw (DisplayController& dc) override
         {
-           // auto res = dc.getResolution();
+            if (frame % 2 == 0)
+                dc.drawImage (images::arrowLeft);
         }
 
         Snake& snake;
+        int frame = 0;
     };
 
 

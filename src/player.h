@@ -75,20 +75,21 @@ struct Player : public Drawable
 
     void update()
     {
-        decltype (tail) newTail {};
-
-        newTail.append (head);
-
-        for (auto i = 0; i < tail.getSize() - 1; ++i)
+        if (tail.getSize() > 0)
         {
-            newTail.append (tail[i]);
+            decltype (tail) newTail {};
+            newTail.append (head);
+
+            for (auto i = 0; i < tail.getSize() - 1; ++i)
+                newTail.append (tail[i]);
+
+            tail.clear();
+
+            for (auto p : newTail)
+                tail.append (p);
         }
 
         pointMover.movePoint (head, currentDirection);
-        tail.clear();
-
-        for (auto p : newTail)
-            tail.append (p);
     }
 
 private:

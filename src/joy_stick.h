@@ -27,6 +27,7 @@ struct JoyStick
         pinMode (pinLayout.analogXPin, INPUT);
         pinMode (pinLayout.analogYPin, INPUT);
         pinMode (pinLayout.buttonClickPin, INPUT);
+        digitalWrite (pinLayout.buttonClickPin, HIGH);
     }
 
 
@@ -41,7 +42,7 @@ struct JoyStick
 
         auto xVal = analogRead (pinLayout.analogXPin);
         auto yVal = analogRead (pinLayout.analogYPin);
-        auto buttonDown = (bool) digitalRead (pinLayout.buttonClickPin);
+        auto buttonDown = ! (bool) digitalRead (pinLayout.buttonClickPin);
 
         auto absX = abs (xVal - halfRes);
         auto absY = abs (yVal - halfRes);
@@ -57,10 +58,10 @@ struct JoyStick
         if (d != direction)
             listener->joyStickUpdate (*this, direction = d);
 
-        if (buttonDown == 0)
+        if (buttonDown)
             listener->joyStickButtonDown (*this);
 
-        Serial.println("update js");
+        Serial.println (buttonDown);
     }
 
 

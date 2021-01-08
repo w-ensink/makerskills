@@ -27,7 +27,7 @@ struct WrappingPointMover
 {
     WrappingPointMover (int maxX, int maxY) : maxX { maxX }, maxY { maxY } {}
 
-    explicit WrappingPointMover (const Point& maxCoords) : maxX { maxCoords.x }, maxY { maxCoords.y } {}
+    explicit WrappingPointMover (const Point& resolution) : maxX { resolution.x - 1 }, maxY { resolution.y - 1 } {}
 
     void movePoint (Point& point, Direction direction) const noexcept
     {
@@ -104,3 +104,11 @@ struct Drawable
 {
     virtual void draw (DisplayController& displayController) = 0;
 };
+
+
+// image of 16x32 pixels
+struct Image
+{
+    uint32_t pixels[16];
+};
+

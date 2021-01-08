@@ -15,10 +15,8 @@ void setup()
 void loop()
 {
     engine.update();
-
     snake.update();
     snake.draw();
     delay (150);
 
-    //engine.getDisplayController().clearDisplay();
 }

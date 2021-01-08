@@ -50,6 +50,22 @@ struct DisplayController
             ledController.clearDisplay (d);
     }
 
+    void drawImage (const Image& image)
+    {
+        for (auto x = 0; x < 16; ++x)
+        {
+            auto column = image.pixels[x];
+            auto mask = (uint32_t) 0x01;
+
+            for (auto y = 0; y < 32; ++y)
+            {
+                auto value = (bool) (column & mask);
+                mask <<= 1;
+                setStateOfPixel ({ x, y }, value);
+            }
+        }
+    }
+
 private:
     Spec spec;
 
