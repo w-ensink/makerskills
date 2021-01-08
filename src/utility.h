@@ -9,6 +9,17 @@ enum struct Direction
     down
 };
 
+Direction oppositeDirection (Direction direction)
+{
+    if (direction == Direction::left)
+        return Direction::right;
+    if (direction == Direction::right)
+        return Direction::left;
+    if (direction == Direction::up)
+        return Direction::down;
+
+    return Direction::up;
+}
 
 // =====================================================================================
 // TDD Point & Array: https://godbolt.org
@@ -53,14 +64,7 @@ struct WrappingPointMover
 
     void movePointInOppositeDirection (Point& point, Direction direction) const
     {
-        if (direction == Direction::left)
-            return movePoint (point, Direction::right);
-        if (direction == Direction::right)
-            return movePoint (point, Direction::left);
-        if (direction == Direction::up)
-            return movePoint (point, Direction::down);
-
-        return movePoint (point, Direction::up);
+        movePoint (point, oppositeDirection (direction));
     }
 
     int maxX, maxY;
@@ -70,7 +74,7 @@ struct WrappingPointMover
 template <typename T, int MaxSize>
 struct Array
 {
-    int getSize() { return size; }
+    int getSize() const { return size; }
 
     T& operator[] (int index)
     {
@@ -111,4 +115,3 @@ struct Image
 {
     uint32_t pixels[16];
 };
-

@@ -31,6 +31,17 @@ struct Player : public Drawable
         if (head == other.head)
             return true;
 
+        if (currentDirection == oppositeDirection (other.currentDirection))
+        {
+            if (head.x == other.head.x)
+                if (abs (head.y - other.head.y) == 1)
+                    return true;
+
+            if (head.y == other.head.y)
+                if (abs (head.x - other.head.x) == 1)
+                    return true;
+        }
+
         for (auto& p : other.tail)
             if (head == p)
                 return true;
@@ -90,6 +101,13 @@ struct Player : public Drawable
         }
 
         pointMover.movePoint (head, currentDirection);
+    }
+
+    int getTailLength() const { return tail.getSize(); }
+
+    void setPosition (Point pos)
+    {
+        head = pos;
     }
 
 private:

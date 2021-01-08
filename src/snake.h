@@ -55,7 +55,18 @@ struct Snake : public Engine::Game, ContextSwitcher
     explicit Snake (Engine& e) : Engine::Game { e }, inGameContext { *this } {}
 
     // ===============================================================================
-
+    struct ScoreBoard
+    {
+        enum struct Winner
+        {
+            none,
+            left,
+            right
+        };
+        int leftLength;
+        int rightLength;
+        Winner winner = Winner::none;
+    };
 
     struct InGameContext : Context, JoyStick::Listener
     {
@@ -79,6 +90,7 @@ struct Snake : public Engine::Game, ContextSwitcher
             rightPlayer.removeTail();
 
             generateNewFoodPosition();
+            givePlayersRandomPositions();
         }
 
         void update() override
@@ -86,27 +98,46 @@ struct Snake : public Engine::Game, ContextSwitcher
             leftPlayer.update();
             rightPlayer.update();
 
-            //auto leftRanIntoRight = leftPlayer.ranIntoOther (rightPlayer);
-            // auto rightRanIntoLeft = rightPlayer.ranIntoOther (leftPlayer);
+            auto leftRanIntoRight = leftPlayer.ranIntoOther (rightPlayer);
+            auto rightRanIntoLeft = rightPlayer.ranIntoOther (leftPlayer);
+
+            if (leftRanIntoRight && rightRanIntoLeft)
+            {
+                auto leftTailLen = leftPlayer.getTailLength();
+                auto rightTailLen = rightPlayer.getTailLength();
+
+                if (leftTailLen == rightTailLen)
+                    return gameOverTie();
+
+                if (leftTailLen > rightTailLen)
+                    return leftWon();
+
+                return rightWon();
+            }
+
+            if (leftRanIntoRight)
+                return rightWon();
+
+            if (rightRanIntoLeft)
+                return leftWon();
 
             if (leftPlayer.ranIntoItself())
-                snake.switchContextTo (&snake.menuContext);
+                return rightWon();
 
             if (rightPlayer.ranIntoItself())
-                snake.switchContextTo (&snake.menuContext);
+                return leftWon();
 
             if (leftPlayer.canGrabFood (food))
             {
                 leftPlayer.increaseTail();
                 generateNewFoodPosition();
             }
+
             if (rightPlayer.canGrabFood (food))
             {
                 rightPlayer.increaseTail();
                 generateNewFoodPosition();
             }
-
-            //snake.switchContextTo (&snake.menuContext);
         }
 
         void draw (DisplayController& dc) override
@@ -126,6 +157,36 @@ struct Snake : public Engine::Game, ContextSwitcher
         {
             food.position.x = random() % 16;
             food.position.y = random() % 32;
+        }
+
+        void leftWon()
+        {
+            snake.scoreBoard.winner = ScoreBoard::Winner::left;
+            snake.switchContextTo (&snake.menuContext);
+        }
+
+        void rightWon()
+        {
+            snake.scoreBoard.winner = ScoreBoard::Winner::right;
+            snake.switchContextTo (&snake.menuContext);
+        }
+
+        void gameOverTie()
+        {
+            snake.scoreBoard.winner = ScoreBoard::Winner::none;
+            snake.switchContextTo (&snake.menuContext);
+        }
+
+        void givePlayersRandomPositions()
+        {
+            auto firstPoint = Point { random() % 16, random() % 32 };
+            auto secondPoint = Point { random() % 16, random() % 32 };
+
+            while (firstPoint == secondPoint)
+                secondPoint = Point { random() % 16, random() % 32 };
+
+            leftPlayer.setPosition (firstPoint);
+            rightPlayer.setPosition (secondPoint);
         }
     };
 
@@ -157,7 +218,14 @@ struct Snake : public Engine::Game, ContextSwitcher
         void draw (DisplayController& dc) override
         {
             if (frame % 2 == 0)
-                dc.drawImage (images::arrowLeft);
+            {
+                if (snake.scoreBoard.winner == ScoreBoard::Winner::left)
+                    dc.drawImage (images::arrowLeft);
+                if (snake.scoreBoard.winner == ScoreBoard::Winner::right)
+                    dc.drawImage (images::arrowRight);
+                else
+                    dc.drawImage (images::doubleArrow);
+            }
         }
 
         Snake& snake;
@@ -185,4 +253,5 @@ struct Snake : public Engine::Game, ContextSwitcher
 private:
     InGameContext inGameContext { *this };
     MenuContext menuContext { *this };
+    ScoreBoard scoreBoard;
 };
