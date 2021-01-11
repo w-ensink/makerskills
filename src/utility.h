@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <Audio.h>
+
 enum struct Direction
 {
     left,
@@ -125,3 +127,14 @@ struct Image
 {
     uint32_t pixels[16];
 };
+
+
+struct Sound
+{
+    const unsigned int* data;
+};
+
+namespace utility
+{
+AudioStream* nullStream = nullptr;
+}

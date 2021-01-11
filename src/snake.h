@@ -30,13 +30,13 @@ struct ContextSwitcher
         if (to == nullptr)
             return;
 
-        if (currentContext)
+        if (currentContext != nullptr)
         {
             currentContext->onContextExit();
             currentContext->contextSwitcher = nullptr;
         }
-        currentContext = to;
 
+        currentContext = to;
         currentContext->contextSwitcher = this;
         currentContext->onContextEnter();
     }
@@ -63,8 +63,7 @@ struct Snake : public Engine::Game, ContextSwitcher
             left,
             right
         };
-        int leftLength;
-        int rightLength;
+
         Winner winner = Winner::none;
     };
 
@@ -93,6 +92,11 @@ struct Snake : public Engine::Game, ContextSwitcher
             givePlayersRandomPositions();
         }
 
+        void onContextExit() override
+        {
+            snake.engine.getAudioController().playSound (sounds::kick);
+        }
+
         void update() override
         {
             leftPlayer.update();
@@ -103,29 +107,23 @@ struct Snake : public Engine::Game, ContextSwitcher
 
             if (leftRanIntoRight && rightRanIntoLeft)
             {
-                auto leftTailLen = leftPlayer.getTailLength();
-                auto rightTailLen = rightPlayer.getTailLength();
+                auto leftTailLength = leftPlayer.getTailLength();
+                auto rightTailLength = rightPlayer.getTailLength();
 
-                if (leftTailLen == rightTailLen)
+                if (leftTailLength == rightTailLength)
                     return gameOverTie();
 
-                if (leftTailLen > rightTailLen)
-                    return leftWon();
+                if (leftTailLength > rightTailLength)
+                    return gameOverLeftWon();
 
-                return rightWon();
+                return gameOverRightWon();
             }
 
-            if (leftRanIntoRight)
-                return rightWon();
+            if (leftRanIntoRight || leftPlayer.ranIntoItself())
+                return gameOverRightWon();
 
-            if (rightRanIntoLeft)
-                return leftWon();
-
-            if (leftPlayer.ranIntoItself())
-                return rightWon();
-
-            if (rightPlayer.ranIntoItself())
-                return leftWon();
+            if (rightRanIntoLeft || rightPlayer.ranIntoItself())
+                return gameOverLeftWon();
 
             if (leftPlayer.canGrabFood (food))
             {
@@ -159,13 +157,13 @@ struct Snake : public Engine::Game, ContextSwitcher
             food.position.y = random() % 32;
         }
 
-        void leftWon()
+        void gameOverLeftWon()
         {
             snake.scoreBoard.winner = ScoreBoard::Winner::left;
             snake.switchContextTo (&snake.menuContext);
         }
 
-        void rightWon()
+        void gameOverRightWon()
         {
             snake.scoreBoard.winner = ScoreBoard::Winner::right;
             snake.switchContextTo (&snake.menuContext);

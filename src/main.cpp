@@ -14,12 +14,12 @@ void setup()
 
 void loop()
 {
-    for (auto i = 0; i < 10; ++i)
+    for (auto i = 0; i < 11; ++i)
     {
         delay (10);
         engine.update();
     }
-    
+
     engine.getDisplayController().clearDisplay();
     snake.update();
     snake.draw();

@@ -3,6 +3,35 @@
 
 #include "display.h"
 #include "joy_stick.h"
+#include "sounds.h"
+// =============================================================================================
+
+struct AudioController
+{
+    void setup()
+    {
+        AudioMemory (32);
+
+    }
+
+    void playSound (const Sound& sound)
+    {
+        player.play (sound.data);
+    }
+
+private:
+
+
+   // Array<AudioPlayMemory, 4> soundPlayers;
+   // Array<AssignableAudioConnection, 5> connections;
+    AudioPlayMemory player;
+    AudioMixer4 mixer;
+    AudioOutputAnalog output;
+    AudioConnection c { player, output };
+};
+
+// =============================================================================================
+
 
 struct Engine
 {
@@ -24,16 +53,18 @@ struct Engine
 
     JoyStick& getRightJoyStick() noexcept { return rightJoyStick; }
 
+    AudioController& getAudioController() noexcept { return audioController; }
+
     void setup()
     {
         leftJoyStick.setup();
         rightJoyStick.setup();
         displayController.setup();
+        audioController.setup();
     }
 
     void update()
     {
-        //displayController.clearDisplay();
         leftJoyStick.update();
         rightJoyStick.update();
     }
@@ -63,4 +94,6 @@ private:
 
     JoyStick leftJoyStick { joyStickLeftLayout };
     JoyStick rightJoyStick { joyStickRightLayout };
+
+    AudioController audioController;
 };
