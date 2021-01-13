@@ -78,6 +78,8 @@ struct Snake : public Engine::Game, ContextSwitcher
 
             if (&snake.engine.getRightJoyStick() == &joyStick)
                 rightPlayer.changeDirection (direction);
+
+            snake.engine.getAudioController().playSound (sounds::turnSound);
         }
 
         void onContextEnter() override
@@ -90,6 +92,8 @@ struct Snake : public Engine::Game, ContextSwitcher
 
             generateNewFoodPosition();
             givePlayersRandomPositions();
+
+            snake.engine.getAudioController().playSound (sounds::startGame);
         }
 
         void onContextExit() override
@@ -239,7 +243,7 @@ struct Snake : public Engine::Game, ContextSwitcher
 
     void setup() override
     {
-        switchContextTo (&inGameContext);
+        switchContextTo (&menuContext);
     }
 
     void update() override

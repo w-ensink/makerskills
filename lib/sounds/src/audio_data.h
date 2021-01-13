@@ -9,3 +9,7 @@ extern const unsigned int AudioSampleRightcrash[6897];
 extern const unsigned int AudioSampleLinksfood[2769];
 
 extern const unsigned int AudioSampleRechtsfood[2769];
+
+extern const unsigned int AudioSampleTurn[705];
+
+extern const unsigned int AudioSampleStartgame[6897];

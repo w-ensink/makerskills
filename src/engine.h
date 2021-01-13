@@ -15,14 +15,28 @@ struct AudioController
 
     void playSound (const Sound& sound)
     {
-        player.play (sound.data);
+        if (! player.isPlaying())
+            player.play (sound.data);
+        else if (! player2.isPlaying())
+            player2.play (sound.data);
+        else if (! player3.isPlaying())
+            player3.play (sound.data);
+        else
+            player4.play (sound.data);
     }
 
 private:
     AudioPlayMemory player;
+    AudioPlayMemory player2;
+    AudioPlayMemory player3;
+    AudioPlayMemory player4;
     AudioMixer4 mixer;
     AudioOutputAnalog output;
-    AudioConnection c { player, output };
+    AudioConnection c { player, mixer };
+    AudioConnection c2 { player2, mixer };
+    AudioConnection c3 { player3, mixer };
+    AudioConnection c4 { player4, mixer };
+    AudioConnection c5 { mixer, output };
 };
 
 // =============================================================================================

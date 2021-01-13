@@ -26,5 +26,13 @@ static const Sound rightFood {
     .data = AudioSampleRechtsfood
 };
 
+static const Sound turnSound {
+    .data = AudioSampleTurn
+};
+
+static const Sound startGame {
+    .data = AudioSampleStartgame
+};
+
 
 }
