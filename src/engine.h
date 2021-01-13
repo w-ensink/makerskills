@@ -11,7 +11,6 @@ struct AudioController
     void setup()
     {
         AudioMemory (32);
-
     }
 
     void playSound (const Sound& sound)
@@ -20,10 +19,6 @@ struct AudioController
     }
 
 private:
-
-
-   // Array<AudioPlayMemory, 4> soundPlayers;
-   // Array<AssignableAudioConnection, 5> connections;
     AudioPlayMemory player;
     AudioMixer4 mixer;
     AudioOutputAnalog output;

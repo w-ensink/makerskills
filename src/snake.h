@@ -94,7 +94,6 @@ struct Snake : public Engine::Game, ContextSwitcher
 
         void onContextExit() override
         {
-            snake.engine.getAudioController().playSound (sounds::kick);
         }
 
         void update() override
@@ -129,12 +128,14 @@ struct Snake : public Engine::Game, ContextSwitcher
             {
                 leftPlayer.increaseTail();
                 generateNewFoodPosition();
+                snake.engine.getAudioController().playSound (sounds::leftFood);
             }
 
             if (rightPlayer.canGrabFood (food))
             {
                 rightPlayer.increaseTail();
                 generateNewFoodPosition();
+                snake.engine.getAudioController().playSound (sounds::rightFood);
             }
         }
 
@@ -160,18 +161,21 @@ struct Snake : public Engine::Game, ContextSwitcher
         void gameOverLeftWon()
         {
             snake.scoreBoard.winner = ScoreBoard::Winner::left;
+            snake.engine.getAudioController().playSound (sounds::rightCrash);
             snake.switchContextTo (&snake.menuContext);
         }
 
         void gameOverRightWon()
         {
             snake.scoreBoard.winner = ScoreBoard::Winner::right;
+            snake.engine.getAudioController().playSound (sounds::leftCrash);
             snake.switchContextTo (&snake.menuContext);
         }
 
         void gameOverTie()
         {
             snake.scoreBoard.winner = ScoreBoard::Winner::none;
+            snake.engine.getAudioController().playSound (sounds::draw);
             snake.switchContextTo (&snake.menuContext);
         }
 
