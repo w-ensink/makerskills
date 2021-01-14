@@ -88,7 +88,6 @@ struct Player : public Drawable
     {
         if (tail.getSize() > 0)
         {
-            Serial.println("has tail");
             decltype (tail) newTail {};
             newTail.append (head);
 

@@ -9,7 +9,6 @@ void setup()
 {
     engine.setup();
     snake.setup();
-    Serial.begin (9600);
 }
 
 void loop()
