@@ -30,7 +30,7 @@ rect_height = 500 / rows + 10
 # creating the surface
 surface = pygame.display.set_mode((width, height))
 
-background = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\bg.PNG')
+background = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\background\bg.PNG')
 background = pygame.transform.scale(background, (1400, 1000))
 surface.blit(background, (0, 5))
 
@@ -75,7 +75,7 @@ def draw_grid(grid):
 draw_grid(array_mini_rect())
 
 # loading AI images over the mini rectangles
-image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\pic_1.PNG')
+image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\female\f_1.PNG')
 image = pygame.transform.scale(image, (144, 176))
 surface.blit(image, (starting_position + 25, starting_position + 8))
 
