@@ -1,37 +1,44 @@
 
 import socket
-import threading
+import sys
+import protocol
 
-
-HEADER = 64
-FORMAT = 'utf-8'
 PORT = 50_000
-SERVER = socket.gethostbyname(socket.gethostname())
-ADDRESS = (SERVER, PORT)
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDRESS)
-
-
-def handle_client(connection, address):
-    print(f'New connection: {address}')
-    is_connected = True
-    while is_connected:
-        message_length = connection.recv(HEADER).decode(FORMAT)
-        if message_length:
-            message_length = int(message_length)
-            message = connection.recv(message_length).decode(FORMAT)
-            print(f'received: {message}')
+IP_ADDRESS = '84.104.226.204'
+ADDRESS = (IP_ADDRESS, PORT)
+FORMAT = 'utf-8'
+HEADER = 64
 
 
-def start():
-    server.listen()
-    while True:
-        connection, address = server.accept()
-        client_thread = threading.Thread(target=handle_client, args=(connection, address))
-        client_thread.start()
-        print(f'There are now {threading.active_count() - 1} clients')
+class ServerConnection:
+    def __init__(self, address):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(address)
+        self.protocol = protocol.Protocol()
+
+    def __del__(self):
+        self.client.close()
+
+    def send_message(self, message):
+        encoded_msg = self.protocol.encode_text(message)
+        print(f'encoded msg: "{encoded_msg}"')
+        length = self.protocol.encode_message_length_header(len(encoded_msg))
+        print(f'encoded msg length: {length}')
+        self.client.send(length)
+        self.client.send(encoded_msg)
+
+    def wait_for_message(self):
+        length = self.client.recv(self.protocol.get_header_size()).decode(FORMAT)
+        print(f'length: {length}')
+        if length:
+            length = int(length)
+            message = self.client.recv(length).decode(FORMAT)
+            message = self.protocol.decode_text(message)
+            return message
 
 
 if __name__ == '__main__':
-    start()
+    server_connection = ServerConnection(ADDRESS)
+    server_connection.send_message(f'hello from client "{sys.argv[0]}"')
+    msg = server_connection.wait_for_message()
+    print(f'client received: "{msg}"')
