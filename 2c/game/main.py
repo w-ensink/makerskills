@@ -9,12 +9,13 @@ pygame.init()
 pygame.display.set_caption('Who Am AI?')
 
 # Initializing surface 
-starting_position = 80
+starting_position = 20
 width = 1400
 height = 1000
 
 # set variables
 white = (255, 255, 255)
+black = (0, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
@@ -23,13 +24,13 @@ cols = 7
 rows = 3
 
 # rectangle dimensions
-rect_width = 1240 / cols - 50
-rect_height = 500 / rows - 20
+rect_width = 1360 / cols - 50
+rect_height = 500 / rows + 10
 
 # creating the surface
 surface = pygame.display.set_mode((width, height))
 
-background = pygame.image.load(r'D:\Pictures\bg.PNG')
+background = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\bg.PNG')
 background = pygame.transform.scale(background, (1400, 1000))
 surface.blit(background, (0, 5))
 
@@ -38,12 +39,10 @@ surface.blit(background, (0, 5))
 color = (255, 0, 0)
 
 # Drawing image rectangle
-# width = 1240
-# height = 500
 pygame.draw.rect(surface, color, pygame.Rect(starting_position,
                                              starting_position,
                                              width - (starting_position * 2),
-                                             height / 1.8), 2)
+                                             height / 1.5), 2)
 
 # drawing text rectangle
 pygame.draw.rect(surface, (0, 0, 255), pygame.Rect(starting_position,
@@ -61,8 +60,8 @@ def array_mini_rect():
     grid = []
     for x in range(cols):
         for y in range(rows):
-            grid.append(pygame.Rect(starting_position + 25 + x * (1240 / cols),
-                                    starting_position + 8 + y * (height / 1.8) / rows,
+            grid.append(pygame.Rect(starting_position + 25 + x * (1360 / cols),
+                                    starting_position + 8 + y * (height / 1.5) / rows,
                                     rect_width,
                                     rect_height))
     return grid
@@ -76,8 +75,8 @@ def draw_grid(grid):
 draw_grid(array_mini_rect())
 
 # loading AI images over the mini rectangles
-image = pygame.image.load(r'D:\Pictures\alleluia1.PNG')
-image = pygame.transform.scale(image, (127, 146))
+image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\pic_1.PNG')
+image = pygame.transform.scale(image, (144, 176))
 surface.blit(image, (starting_position + 25, starting_position + 8))
 
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -85,7 +84,7 @@ font1 = pygame.font.Font('freesansbold.ttf', 24)
 
 # create a text surface object,
 # on which text is drawn on it.
-text = font.render('1', True, white)
+text = font.render('1', True, black)
 question = font1.render('hallo wutru', True, white)
 
 # create a rectangular object for the
@@ -94,7 +93,7 @@ textRect = text.get_rect()
 questionRect = text.get_rect()
 
 # set the center of the rectangular object.
-textRect.center = (starting_position + 25 + rect_width / 2, height / 4)
+textRect.center = (starting_position + 25 + rect_width / 2, height / 4.35)
 questionRect.center = (starting_position + 30, 750)
 
 # infinite loop

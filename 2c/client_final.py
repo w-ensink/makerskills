@@ -4,7 +4,7 @@ import sys
 import protocol
 
 PORT = 50_000
-IP_ADDRESS = '192.168.178.10'
+IP_ADDRESS = '84.104.226.204'
 ADDRESS = (IP_ADDRESS, PORT)
 FORMAT = 'utf-8'
 HEADER = 64
