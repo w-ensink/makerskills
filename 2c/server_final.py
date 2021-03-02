@@ -1,7 +1,7 @@
 
 import socket
 import protocol
-import logging
+
 
 PORT = 50_000
 SERVER = socket.gethostbyname('192.168.178.10')
