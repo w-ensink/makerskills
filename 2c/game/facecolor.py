@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import cv2
 
-img = cv2.imread("m_1_test.PNG")
+img = cv2.imread("assets\\female\\f_25.PNG")
 
 index = ["color", "color_name", "hex", "R", "G", "B"]
 
@@ -52,7 +52,7 @@ while 1:
         cv2.putText(img, text, (50, 50), 2, 0.8, (255, 255, 255), 2, cv2.LINE_AA)
 
         if r + g + b >= 600:
-            cv2.putText(img, text, (50, 50, 2, 0.8, (0, 0, 0), 2, cv2.LINE_AA))
+            cv2.putText(img, text, (50, 50), 2, 0.8, (0, 0, 0), 2, cv2.LINE_AA)
 
         clicked = False
 
@@ -60,4 +60,3 @@ while 1:
         break
 
 cv2.destroyAllWindows()
-
