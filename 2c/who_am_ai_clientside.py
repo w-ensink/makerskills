@@ -48,6 +48,9 @@ class WhoAmAIClient(threading.Thread):
             self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
         self.display.set_feedback('Je antwoord is verstuurd.')
         self.server_connection.send_message(answer)
+        answer = self.server_connection.wait_for_message()
+        self.display.set_feedback(f'Het antwoord: "{answer}". Wacht op de volgende vraag')
+        self.server_connection.send_message('OK')
 
     def handle_next_message(self):
         message = self.server_connection.wait_for_message()
