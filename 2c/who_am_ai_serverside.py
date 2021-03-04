@@ -27,7 +27,7 @@ class ClientPlayer(GameLogic.Player):
             return
 
     def start_game(self, face_ids: [str], your_id: str):
-        info = '|'.join(face_ids) + '/' + your_id
+        info = '|'.join(face_ids) + '&' + your_id
         self.client_connection.send_message('START' + info)
 
     def handle_won_game(self):

@@ -1,9 +1,64 @@
 from client import ServerConnection
 from speech_to_text_input import SpeechToText
+import threading
+from display import Display
+import pygame
+
 
 PORT = 50_000
 IP_ADDRESS = '84.104.226.204'
 ADDRESS = (IP_ADDRESS, PORT)
+
+
+class WhoAmAIClient(threading.Thread):
+    def __init__(self, display):
+        super().__init__()
+        self.server_connection = ServerConnection(ADDRESS)
+        self.speech_to_text = SpeechToText()
+        self.display = display
+
+    def run(self):
+        while True:
+            self.handle_next_message()
+
+    def handle_start_game(self, message):
+        grid, this = message.split('&')
+        grid = grid.split('|')
+        self.display.load_person_grid(grid)
+        self.display.load_self_person(this)
+
+    def handle_ask_question(self):
+        self.display.set_feedback('Spreek je vraag in')
+        question = self.speech_to_text.get_user_input()
+        self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
+        while not self.speech_to_text.get_user_conformation():
+            self.display.set_feedback('Ik heb het niet verzonden, spreek opnieuw in')
+            question = self.speech_to_text.get_user_input()
+            self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
+        self.display.set_feedback('Je vraag is verzonden...')
+        self.server_connection.send_message(question)
+
+    def handle_answer_question(self, question):
+        self.display.set_feedback(f'Vraag: {question}? Spreek je antwoord in.')
+        answer = self.speech_to_text.get_user_input()
+        self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
+        while not self.speech_to_text.get_user_conformation():
+            self.display.set_feedback('Het bericht is niet verstuurd, spreek opnieuw je antwoord in.')
+            answer = self.speech_to_text.get_user_input()
+            self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
+        self.display.set_feedback('Je antwoord is verstuurd.')
+        self.server_connection.send_message(answer)
+
+    def handle_next_message(self):
+        message = self.server_connection.wait_for_message()
+        if message.startswith('START'):
+            self.handle_start_game(message[5:])
+
+        if message.startswith('QUESTION'):
+            self.handle_ask_question()
+
+        if message.startswith('ANSWER'):
+            self.handle_answer_question(message[6:])
 
 
 class Player:
@@ -43,7 +98,21 @@ class Player:
             self.server_connection.send_message(answer)
 
 
-if __name__ == '__main__':
-    player = Player()
+def main():
+    pygame.init()
+    clock = pygame.time.Clock()
+    display = Display(1400, 1000)
+    who_am_ai_client = WhoAmAIClient(display)
+    who_am_ai_client.start()
+
     while True:
-        player.start()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 0
+
+        display.render()
+        clock.tick(60)
+
+
+if __name__ == '__main__':
+    exit(main())

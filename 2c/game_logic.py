@@ -16,9 +16,10 @@ class GameData:
     @staticmethod
     def instantiate():
         d = GameData()
-        d.used_images = ['10', '1', '2', '3', '4']
-        d.player_1_image = '10'
-        d.player_2_image = '2'
+        for i in range(21):
+            d.used_images.append(f'm_{i + 1}.png')
+        d.player_1_image = 'm_1.png'
+        d.player_2_image = 'm_2.png'
         return d
 
 
