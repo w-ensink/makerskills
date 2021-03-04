@@ -37,6 +37,12 @@ class ClientConnection:
         self.connection.send(length)
         self.connection.send(message)
 
+    def close(self):
+        self.connection.close()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
+
 
 def wait_for_two_client_connections() -> [ClientConnection, ClientConnection]:
     server.listen()
@@ -51,10 +57,8 @@ def wait_for_two_client_connections() -> [ClientConnection, ClientConnection]:
 
 if __name__ == '__main__':
     connections = wait_for_two_client_connections()
-    player_1 = connections[0]
-    player_2 = connections[1]
-
-    msg = player_2.wait_for_message()
-    print(f'player 1: {msg}')
-    player_2.send_message('hello from server')
-    _ = input('press enter to exit...')
+    with connections[0] as player_1, connections[1] as player_2:
+        msg = player_2.wait_for_message()
+        print(f'player 1: {msg}')
+        player_2.send_message('hello from server')
+        _ = input('press enter to exit...')

@@ -53,6 +53,7 @@ class GameLogic:
         self.players = []
         self.active_player: GameLogic.Player = None
         self.inactive_player: GameLogic.Player = None
+        self.keep_running = True
 
     def setup(self):
         if len(self.players) != 2:
@@ -77,7 +78,7 @@ class GameLogic:
     def run(self):
         self.setup()
 
-        while self.step():
+        while self.step() and self.keep_running:
             pass
 
     # returns true if the game should continue, false if it needs to stop

@@ -16,7 +16,7 @@ class ServerConnection:
         self.client.connect(address)
         self.protocol = protocol.Protocol()
 
-    def __del__(self):
+    def close(self):
         self.client.close()
 
     def send_message(self, message):

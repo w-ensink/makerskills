@@ -1,7 +1,7 @@
 
 from server import ClientConnection, wait_for_two_client_connections
 from game_logic import GameLogic
-
+import threading
 
 # sending messages in the following format:
 # 'START': start game followed by its picture ID's
@@ -37,13 +37,20 @@ class ClientPlayer(GameLogic.Player):
         self.client_connection.send_message('LOSE')
 
 
-if __name__ == '__main__':
-    p1, p2 = wait_for_two_client_connections()
-    p1, p2 = ClientPlayer(p1), ClientPlayer(p2)
-
+def main(connections):
+    connection1, connection2 = connections
+    p1, p2 = ClientPlayer(connection1), ClientPlayer(connection2)
     game = GameLogic()
     game.add_player(p1)
     game.add_player(p2)
-
     game.setup()
     game.run()
+
+
+if __name__ == '__main__':
+    connections = wait_for_two_client_connections()
+    thread = threading.Thread(target=main, args=connections)
+    thread.start()
+    _ = input('press enter to exit')
+    for c in connections:
+        c.close()

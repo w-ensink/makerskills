@@ -16,10 +16,15 @@ class WhoAmAIClient(threading.Thread):
         self.server_connection = ServerConnection(ADDRESS)
         self.speech_to_text = SpeechToText()
         self.display = display
+        self.keep_running = True
+
+    def stop(self):
+        self.keep_running = False
 
     def run(self):
-        while True:
+        while self.keep_running:
             self.handle_next_message()
+        self.server_connection.close()
 
     def handle_start_game(self, message):
         grid, this = message.split('&')
@@ -62,6 +67,12 @@ class WhoAmAIClient(threading.Thread):
 
         if message.startswith('ANSWER'):
             self.handle_answer_question(message[6:])
+
+        if message.startswith('WIN'):
+            self.display.set_feedback('Je hebt gewonnen!')
+
+        if message.startswith('LOSE'):
+            self.display.set_feedback('Je hebt verloren, loser.')
 
 
 class Player:
@@ -111,6 +122,7 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                who_am_ai_client.stop()
                 return 0
 
         display.render()
