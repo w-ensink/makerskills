@@ -63,7 +63,6 @@ def array_mini_rect():
                                     starting_position + 8 + y * (height / 1.5) / rows,
                                     rect_width,
                                     rect_height))
-
     return grid
 
 
@@ -97,7 +96,6 @@ questionRect.center = (starting_position + 30, 750)
 
 # infinite loop
 while True:
-
     # copying the text surface object
     # to the display surface object
     # at the center coordinate.
