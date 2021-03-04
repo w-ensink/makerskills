@@ -21,15 +21,12 @@ class ServerConnection:
 
     def send_message(self, message):
         encoded_msg = self.protocol.encode_text(message)
-        print(f'encoded msg: "{encoded_msg}"')
         length = self.protocol.encode_message_length_header(len(encoded_msg))
-        print(f'encoded msg length: {length}')
         self.client.send(length)
         self.client.send(encoded_msg)
 
     def wait_for_message(self):
         length = self.client.recv(self.protocol.get_header_size()).decode(FORMAT)
-        print(f'length: {length}')
         if length:
             length = int(length)
             message = self.client.recv(length).decode(FORMAT)

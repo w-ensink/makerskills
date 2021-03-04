@@ -32,6 +32,7 @@ class Player:
             print('zeg iets om te antwoorden')
             answer = self.speech_to_text.get_user_input()
             print(f'hoorde: "{answer}"')
+            print('wil je dat versturen? (ja/nee)')
             while not self.speech_to_text.get_user_conformation():
                 answer = self.speech_to_text.get_user_input()
                 print(f'het bericht is niet verstuurd, spreek opnieuw een vraag in')

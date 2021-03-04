@@ -33,7 +33,7 @@ class ClientConnection:
     def send_message(self, message):
         message = self.protocol.encode_text(message)
         length = self.protocol.encode_message_length_header(len(message))
-        print(f'message: {message}, length: {length}')
+        # print(f'message: {message}, length: {length}')
         self.connection.send(length)
         self.connection.send(message)
 
@@ -45,7 +45,7 @@ def wait_for_two_client_connections() -> [ClientConnection, ClientConnection]:
         connection, address = server.accept()
         client_connections.append(ClientConnection(connection, address))
         print('client connection made')
-    print(f'{len(client_connections)} len client connections')
+    print(f'{len(client_connections)} client connections')
     return client_connections[0], client_connections[1]
 
 
