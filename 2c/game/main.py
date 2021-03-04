@@ -73,8 +73,13 @@ def draw_grid(grid):
 
 draw_grid(array_mini_rect())
 
+images = []
+for num in range(21):
+    image = pygame.image.load(f'D:\hku\jaar2\makerskills\\2c\game\\assets\\female\\f_{num}.PNG')
+    images.append(image)
+
 # loading AI images over the mini rectangles
-image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\game\assets\female\f_20.PNG')
+#image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\game\assets\female\f_20.PNG')
 image = pygame.transform.scale(image, (144, 176))
 surface.blit(image, (starting_position + 25, starting_position + 8))
 
