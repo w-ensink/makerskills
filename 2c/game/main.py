@@ -19,7 +19,7 @@ black = (0, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
-# number of rows and collums for the images
+# number of rows and columns for the images
 cols = 7
 rows = 3
 
@@ -30,10 +30,9 @@ rect_height = 500 / rows + 10
 # creating the surface
 surface = pygame.display.set_mode((width, height))
 
-background = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\background\bg.PNG')
+background = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\game\assets\background\bg.PNG')
 background = pygame.transform.scale(background, (1400, 1000))
 surface.blit(background, (0, 5))
-
 
 # Initialing Color
 color = (255, 0, 0)
@@ -64,6 +63,7 @@ def array_mini_rect():
                                     starting_position + 8 + y * (height / 1.5) / rows,
                                     rect_width,
                                     rect_height))
+
     return grid
 
 
@@ -75,12 +75,12 @@ def draw_grid(grid):
 draw_grid(array_mini_rect())
 
 # loading AI images over the mini rectangles
-image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\assets\female\f_1.PNG')
+image = pygame.image.load(r'D:\hku\jaar2\makerskills\2c\game\assets\female\f_20.PNG')
 image = pygame.transform.scale(image, (144, 176))
 surface.blit(image, (starting_position + 25, starting_position + 8))
 
-font = pygame.font.Font('freesansbold.ttf', 32)
-font1 = pygame.font.Font('freesansbold.ttf', 24)
+font = pygame.font.Font('assets\\fonts\\arial.ttf', 32)
+font1 = pygame.font.Font('assets\\fonts\\arial.ttf', 30)
 
 # create a text surface object,
 # on which text is drawn on it.
@@ -92,7 +92,6 @@ question = font1.render('hallo wutru', True, white)
 textRect = text.get_rect()
 questionRect = text.get_rect()
 
-# set the center of the rectangular object.
 textRect.center = (starting_position + 25 + rect_width / 2, height / 4.35)
 questionRect.center = (starting_position + 30, 750)
 
