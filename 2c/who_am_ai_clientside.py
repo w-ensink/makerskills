@@ -25,6 +25,9 @@ class Player:
                 print('het bericht is niet verstuurd, stel opnieuw een vraag')
             print(f'"{question}" is verstuurd, nu is het wachten op een antwoord...')
             self.server_connection.send_message(question)
+            answer = self.server_connection.wait_for_message()
+            print(f'The answer is: {answer}')
+            self.server_connection.send_message('OK')
 
         elif message.startswith('ANSWER'):
             question_to_answer = message[6:]

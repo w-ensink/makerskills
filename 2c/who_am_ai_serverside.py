@@ -21,6 +21,11 @@ class ClientPlayer(GameLogic.Player):
         self.client_connection.send_message('ANSWER' + question)
         return self.client_connection.wait_for_message()
 
+    def answer_received(self, answer: str):
+        self.client_connection.send_message('RESPONSE' + answer)
+        if self.client_connection.wait_for_message() == 'OK':
+            return
+
     def start_game(self, face_ids: [str], your_id: str):
         info = '|'.join(face_ids) + '/' + your_id
         self.client_connection.send_message('START' + info)
