@@ -3,6 +3,7 @@ from server import ClientConnection, wait_for_two_client_connections
 from game_logic import GameLogic
 import threading
 
+
 # sending messages in the following format:
 # 'START': start game followed by its picture ID's
 # 'QUESTION': when expecting a question
@@ -26,9 +27,8 @@ class ClientPlayer(GameLogic.Player):
         if self.client_connection.wait_for_message() == 'OK':
             return
 
-    def start_game(self, face_ids: [str], your_id: str):
-        info = '|'.join(face_ids) + '&' + your_id
-        self.client_connection.send_message('START' + info)
+    def start_game(self, serialized_person_data_base: str):
+        self.client_connection.send_message('START' + serialized_person_data_base)
 
     def handle_won_game(self):
         self.client_connection.send_message('LOSE')
@@ -36,6 +36,9 @@ class ClientPlayer(GameLogic.Player):
     def handle_lost_game(self):
         self.client_connection.send_message('LOSE')
 
+
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
 def main(connection1, connection2):
     p1, p2 = ClientPlayer(connection1), ClientPlayer(connection2)

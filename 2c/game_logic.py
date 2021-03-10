@@ -1,29 +1,21 @@
 
 
 import unittest
+from person_data_base import PersonDataBase
 
 
 class InvalidPlayerAmountException(BaseException):
     pass
 
 
-class GameData:
-    def __init__(self):
-        self.used_images = []
-        self.player_1_image = ''
-        self.player_2_image = ''
-
-    @staticmethod
-    def instantiate():
-        d = GameData()
-        for i in range(21):
-            d.used_images.append(f'm_{i + 1}.png')
-        d.player_1_image = 'm_1.png'
-        d.player_2_image = 'm_2.png'
-        return d
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
 
 class GameLogic:
+    # this player class represents any player on the server side.
+    # so the sub class of this will be responsible for client communication
+    # or if it's local only, it will just be connected to the display & input directly
     class Player:
         # should provide a question that gets asked to the other player
         def provide_question(self) -> str:
@@ -38,7 +30,7 @@ class GameLogic:
             pass
 
         # called at the start of the game, to provide avatar information
-        def start_game(self, face_ids: [str], your_id: str):
+        def start_game(self, serialized_person_data_base: str):
             pass
 
         # called when this player lost the game
@@ -48,6 +40,8 @@ class GameLogic:
         # called when this player won the game
         def handle_won_game(self):
             pass
+
+    # ---------------------------------------------------------------------------
 
     def __init__(self):
         self.players = []
@@ -62,9 +56,10 @@ class GameLogic:
         self.active_player = self.players[0]
         self.inactive_player = self.players[1]
 
-        gd = GameData.instantiate()
-        self.active_player.start_game(gd.used_images, gd.player_1_image)
-        self.inactive_player.start_game(gd.used_images, gd.player_2_image)
+        data_base = PersonDataBase.generate_random_data_base()
+        serialised_data_base = data_base.to_string()
+        self.active_player.start_game(serialised_data_base)
+        self.inactive_player.start_game(serialised_data_base)
 
     def add_player(self, player):
         self.players.append(player)
@@ -95,6 +90,9 @@ class GameLogic:
         self.active_player, self.inactive_player = self.inactive_player, self.active_player
         return True
 
+
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
 class MockPlayer(GameLogic.Player):
     def __init__(self):

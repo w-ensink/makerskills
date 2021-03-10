@@ -4,19 +4,25 @@ from person_data_base import PersonDataBase
 
 
 class Display:
-    def __init__(self, data_base: PersonDataBase, width: int, height: int):
+    def __init__(self, width: int, height: int):
         self.grid_dimensions = (7, 3)
-        self.data_base = data_base
+        self.data_base = None
         self.width = width
         self.height = height
         self.display = pygame.display.set_mode((width, height))
         pygame.display.set_caption('Who Am AI?')
-        self.feedback = 'ben jij Paul?'
+        self.feedback = 'Wacht tot het spel begint...'
         self.background = pygame.image.load('assets/background/bg.PNG')
         self.font = pygame.font.Font('assets/fonts/arial.ttf', 28)
 
     def set_feedback(self, feedback: str):
         self.feedback = feedback
+
+    def set_data_base(self, data_base):
+        for p in data_base.persons:
+            p.load_photo()
+        data_base.self_person.load_photo()
+        self.data_base = data_base
 
     def render_image_grid(self):
         width = self.width
@@ -73,8 +79,9 @@ class Display:
 
     def render(self):
         self.render_background()
-        self.render_image_grid()
-        self.render_self()
+        if self.data_base:
+            self.render_image_grid()
+            self.render_self()
         self.render_feedback()
         pygame.display.update()
 
@@ -83,25 +90,25 @@ class Display:
 # --------------------------------------------------------------------------------------------------------------
 
 def add_remove_faces(data_base: PersonDataBase):
-    while True:
-        input('enter to remove..')
-        data_base.make_person_invisible('Paul')
-        input('enter to put back')
-        data_base.make_person_visible('Paul')
+    input('enter to remove..')
+    data_base.make_person_invisible('Paul')
+    input('enter to put back')
+    data_base.make_person_visible('Paul')
+    input('enter to stop')
 
 
 def main():
     pygame.init()
     clock = pygame.time.Clock()
     data_base = PersonDataBase.generate_random_data_base()
-    display = Display(data_base=data_base, width=1400, height=1000)
+    display = Display(width=1400, height=1000)
+    display.set_data_base(data_base)
     t = threading.Thread(target=add_remove_faces, args={data_base})
     t.start()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return 0
-
 
         display.render()
         clock.tick(24)

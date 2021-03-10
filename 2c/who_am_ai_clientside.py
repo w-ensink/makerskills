@@ -19,11 +19,11 @@ def get_name_list_from_speech_to_text(speech_to_text):
 
 
 class WhoAmAIClient(threading.Thread):
-    def __init__(self, data_base: PersonDataBase, display: Display):
+    def __init__(self, display: Display):
         super().__init__()
         self.server_connection = ServerConnection(ADDRESS)
         self.speech_to_text = SpeechToText()
-        self.data_base = data_base
+        self.data_base = None
         self.display = display
         self.keep_running = True
 
@@ -36,10 +36,8 @@ class WhoAmAIClient(threading.Thread):
         self.server_connection.close()
 
     def handle_start_game(self, message):
-        grid, this = message.split('&')
-        grid = grid.split('|')
-        self.data_base.load_self_person(this)
-        self.data_base.load_file_names(grid)
+        self.data_base = PersonDataBase.from_string(message)
+        self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
 
     def enter_receive_answer_state(self):
@@ -96,9 +94,8 @@ class WhoAmAIClient(threading.Thread):
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    data_base = PersonDataBase.generate_random_data_base()
-    display = Display(data_base=data_base, width=1400, height=1000)
-    who_am_ai_client = WhoAmAIClient(data_base, display)
+    display = Display(width=1400, height=1000)
+    who_am_ai_client = WhoAmAIClient(display)
     who_am_ai_client.start()
 
     while True:
