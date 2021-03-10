@@ -4,6 +4,9 @@ from game_logic import GameLogic
 import threading
 
 
+# even though it's called ClientPlayer, it runs on the server
+# it resembles a client on the server
+#
 # sending messages in the following format:
 # 'START': start game followed by its picture ID's
 # 'QUESTION': when expecting a question

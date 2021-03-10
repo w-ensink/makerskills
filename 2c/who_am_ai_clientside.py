@@ -11,18 +11,15 @@ IP_ADDRESS = '84.104.226.204'
 ADDRESS = (IP_ADDRESS, PORT)
 
 
-def get_name_list_from_speech_to_text(speech_to_text):
-    speech_to_text.get_user_input()
-
 # --------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------
 
 
 class WhoAmAIClient(threading.Thread):
-    def __init__(self, display: Display):
+    def __init__(self, input_provider, server_connection: ServerConnection, display: Display):
         super().__init__()
-        self.server_connection = ServerConnection(ADDRESS)
-        self.speech_to_text = SpeechToText()
+        self.server_connection = server_connection
+        self.input_provider = input_provider
         self.data_base = None
         self.display = display
         self.keep_running = True
@@ -40,35 +37,33 @@ class WhoAmAIClient(threading.Thread):
         self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
 
-    def enter_receive_answer_state(self):
-        answer = self.server_connection.wait_for_message()
+    def handle_answer_received(self, answer):
         self.display.set_feedback(f'Het antwoord: "{answer}". Welke personen vallen weg?')
-        person_to_remove = self.speech_to_text.get_user_input()
+        person_to_remove = self.input_provider.get_user_input()
         # TODO: make mechanism to remove people from display
         self.server_connection.send_message('OK')
 
     def handle_ask_question(self):
         self.display.set_feedback('Spreek je vraag in')
-        question = self.speech_to_text.get_user_input()
+        question = self.input_provider.get_user_input()
         self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
-        while not self.speech_to_text.get_user_conformation():
+        while not self.input_provider.get_user_confirmation():
             self.display.set_feedback('Ik heb het niet verzonden, spreek opnieuw in')
-            question = self.speech_to_text.get_user_input()
+            question = self.input_provider.get_user_input()
             self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
         self.display.set_feedback('Je vraag is verzonden...')
         self.server_connection.send_message(question)
-        self.enter_receive_answer_state()
 
     def handle_answer_question(self, question):
         self.display.set_feedback(f'Vraag: {question}? Spreek je antwoord in.')
-        answer = self.speech_to_text.get_user_input()
+        answer = self.input_provider.get_user_input()
         self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
-        while not self.speech_to_text.get_user_conformation():
+        while not self.input_provider.get_user_confirmation():
             self.display.set_feedback('Het bericht is niet verstuurd, spreek opnieuw je antwoord in.')
-            answer = self.speech_to_text.get_user_input()
+            answer = self.input_provider.get_user_input()
             self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
         self.display.set_feedback('Je antwoord is verstuurd.')
-        self.server_connection.send_message(answer)
+        self.server_connection.send_message('RESPONSE' + answer)
 
     def handle_next_message(self):
         message = self.server_connection.wait_for_message()
@@ -80,6 +75,9 @@ class WhoAmAIClient(threading.Thread):
 
         if message.startswith('ANSWER'):
             self.handle_answer_question(message[6:])
+
+        if message.startswith('RESPONSE'):
+            self.handle_answer_received(message[8:])
 
         if message.startswith('WIN'):
             self.display.set_feedback('Je hebt gewonnen!')
@@ -95,7 +93,9 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
     display = Display(width=1400, height=1000)
-    who_am_ai_client = WhoAmAIClient(display)
+    server_connection = ServerConnection(ADDRESS)
+    input_provider = SpeechToText()
+    who_am_ai_client = WhoAmAIClient(input_provider, server_connection, display)
     who_am_ai_client.start()
 
     while True:

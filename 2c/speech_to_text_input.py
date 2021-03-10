@@ -25,7 +25,7 @@ class SpeechToText:
             print('couldnt understand that')
             return self.get_user_input()
 
-    def get_user_conformation(self):
+    def get_user_confirmation(self):
         answer = self.get_user_input()
         while answer != 'ja' and answer != 'nee':
             print(f'{answer} is niet ja of nee')
@@ -42,5 +42,5 @@ if __name__ == '__main__':
         print(f'heard: {ans}')
         if ans == 'stop':
             print('weet je het zeker?')
-            if speech_text.get_user_conformation():
+            if speech_text.get_user_confirmation():
                 break
