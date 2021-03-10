@@ -3,6 +3,7 @@ from speech_to_text_input import SpeechToText
 import threading
 from display import Display
 import pygame
+from person_data_base import PersonDataBase
 
 
 PORT = 50_000
@@ -10,11 +11,19 @@ IP_ADDRESS = '84.104.226.204'
 ADDRESS = (IP_ADDRESS, PORT)
 
 
+def get_name_list_from_speech_to_text(speech_to_text):
+    speech_to_text.get_user_input()
+
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
+
+
 class WhoAmAIClient(threading.Thread):
-    def __init__(self, display):
+    def __init__(self, data_base: PersonDataBase, display: Display):
         super().__init__()
         self.server_connection = ServerConnection(ADDRESS)
         self.speech_to_text = SpeechToText()
+        self.data_base = data_base
         self.display = display
         self.keep_running = True
 
@@ -29,8 +38,16 @@ class WhoAmAIClient(threading.Thread):
     def handle_start_game(self, message):
         grid, this = message.split('&')
         grid = grid.split('|')
-        self.display.load_person_grid(grid)
-        self.display.load_self_person(this)
+        self.data_base.load_self_person(this)
+        self.data_base.load_file_names(grid)
+        self.display.set_feedback('Wacht op de andere speler')
+
+    def enter_receive_answer_state(self):
+        answer = self.server_connection.wait_for_message()
+        self.display.set_feedback(f'Het antwoord: "{answer}". Welke personen vallen weg?')
+        person_to_remove = self.speech_to_text.get_user_input()
+        # TODO: make mechanism to remove people from display
+        self.server_connection.send_message('OK')
 
     def handle_ask_question(self):
         self.display.set_feedback('Spreek je vraag in')
@@ -42,9 +59,7 @@ class WhoAmAIClient(threading.Thread):
             self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
         self.display.set_feedback('Je vraag is verzonden...')
         self.server_connection.send_message(question)
-        answer = self.server_connection.wait_for_message()
-        self.display.set_feedback(f'Het antwoord: "{answer}". Wacht op de volgende vraag')
-        self.server_connection.send_message('OK')
+        self.enter_receive_answer_state()
 
     def handle_answer_question(self, question):
         self.display.set_feedback(f'Vraag: {question}? Spreek je antwoord in.')
@@ -75,48 +90,15 @@ class WhoAmAIClient(threading.Thread):
             self.display.set_feedback('Je hebt verloren, loser.')
 
 
-class Player:
-    def __init__(self):
-        self.server_connection = ServerConnection(ADDRESS)
-        self.speech_to_text = SpeechToText()
-
-    def start(self):
-        message = self.server_connection.wait_for_message()
-        if message.startswith('START'):
-            print('start game')
-
-        if message.startswith('QUESTION'):
-            print('stel een vraag')
-            question = self.speech_to_text.get_user_input()
-            print(f'hoorde: "{question}", wil je dit versturen? (ja/nee)')
-            while not self.speech_to_text.get_user_conformation():
-                question = self.speech_to_text.get_user_input()
-                print('het bericht is niet verstuurd, stel opnieuw een vraag')
-            print(f'"{question}" is verstuurd, nu is het wachten op een antwoord...')
-            self.server_connection.send_message(question)
-            answer = self.server_connection.wait_for_message()
-            print(f'The answer is: {answer}')
-            self.server_connection.send_message('OK')
-
-        elif message.startswith('ANSWER'):
-            question_to_answer = message[6:]
-            print(f'vraag: "{question_to_answer}"')
-            print('zeg iets om te antwoorden')
-            answer = self.speech_to_text.get_user_input()
-            print(f'hoorde: "{answer}"')
-            print('wil je dat versturen? (ja/nee)')
-            while not self.speech_to_text.get_user_conformation():
-                answer = self.speech_to_text.get_user_input()
-                print(f'het bericht is niet verstuurd, spreek opnieuw een vraag in')
-            print(f'"{answer}" is verstuurd')
-            self.server_connection.send_message(answer)
-
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    display = Display(1400, 1000)
-    who_am_ai_client = WhoAmAIClient(display)
+    data_base = PersonDataBase.generate_random_data_base()
+    display = Display(data_base=data_base, width=1400, height=1000)
+    who_am_ai_client = WhoAmAIClient(data_base, display)
     who_am_ai_client.start()
 
     while True:

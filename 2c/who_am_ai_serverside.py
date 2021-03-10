@@ -37,8 +37,7 @@ class ClientPlayer(GameLogic.Player):
         self.client_connection.send_message('LOSE')
 
 
-def main(connections):
-    connection1, connection2 = connections
+def main(connection1, connection2):
     p1, p2 = ClientPlayer(connection1), ClientPlayer(connection2)
     game = GameLogic()
     game.add_player(p1)
@@ -48,9 +47,9 @@ def main(connections):
 
 
 if __name__ == '__main__':
-    connections = wait_for_two_client_connections()
-    thread = threading.Thread(target=main, args=connections)
+    c1, c2 = wait_for_two_client_connections()
+    thread = threading.Thread(target=main, args=(c1, c2))
     thread.start()
     _ = input('press enter to exit')
-    for c in connections:
-        c.close()
+    c1.close()
+    c2.close()

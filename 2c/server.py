@@ -12,15 +12,23 @@ FORMAT = 'utf-8'
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDRESS)
 
+num_connections = 0
+
 
 class ClientConnection:
     def __init__(self, connection, address):
         self.connection = connection
         self.address = address
         self.protocol = protocol.Protocol()
+        global num_connections
+        num_connections += 1
 
     def __del__(self):
         self.connection.close()
+        global server, num_connections
+        num_connections -= 1
+        if num_connections == 0:
+            server.close()
 
     def wait_for_message(self):
         length = self.connection.recv(self.protocol.get_header_size()).decode(FORMAT)

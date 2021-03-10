@@ -83,8 +83,8 @@ for num in range(21):
 image = pygame.transform.scale(image, (144, 176))
 surface.blit(image, (starting_position + 25, starting_position + 8))
 
-font = pygame.font.Font('assets\\fonts\\arial.ttf', 32)
-font1 = pygame.font.Font('assets\\fonts\\arial.ttf', 30)
+font = pygame.font.Font('../assets\\fonts\\arial.ttf', 32)
+font1 = pygame.font.Font('../assets\\fonts\\arial.ttf', 30)
 
 # create a text surface object,
 # on which text is drawn on it.
