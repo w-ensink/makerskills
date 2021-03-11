@@ -82,7 +82,7 @@ class GameLogic:
         answer = self.inactive_player.provide_answer(question)
         print(f'vraag: {question}, antwoord: {answer}')
 
-        if question.startswith('jij bent') or question.startswith('je bent') and answer == 'ja':
+        if question.lower().startswith('jij bent') or question.lower().startswith('je bent') and answer == 'ja':
             self.active_player.handle_won_game()
             self.inactive_player.handle_lost_game()
             return False
