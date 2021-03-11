@@ -2,6 +2,7 @@
 import json
 import pygame
 import unittest
+import random
 
 
 class Person:
@@ -90,6 +91,21 @@ class PersonDataBase:
         db.self_person = Person.from_string(this)
         db.persons = [Person.from_string(s) for s in persons.split('#')]
         return db
+
+    @staticmethod
+    def generate_two_random_databases_with_different_self():
+        file_names = [f'm_{x * 3 + y + 1}.png' for x in range(7) for y in range(3)]
+        self_1 = random.choice(file_names)
+        self_2 = random.choice(file_names)
+        while self_1 == self_2:
+            self_2 = random.choice(file_names)
+        db1 = PersonDataBase()
+        db2 = PersonDataBase()
+        db1.load_file_names(file_names)
+        db1.load_self_person(self_1)
+        db2.load_self_person(self_2)
+        db2.load_file_names(file_names)
+        return db1, db2
 
 
 # --------------------------------------------------------------------------------------------------------------
