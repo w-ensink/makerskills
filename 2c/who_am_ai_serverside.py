@@ -34,10 +34,14 @@ class ClientPlayer(GameLogic.Player):
         self.client_connection.send_message('START' + serialized_person_data_base)
 
     def handle_won_game(self):
-        self.client_connection.send_message('LOSE')
+        self.client_connection.send_message('WIN')
+        print('handle won game')
+        # TODO: maybe ask for confirmation from client?
 
     def handle_lost_game(self):
         self.client_connection.send_message('LOSE')
+        print('handle lost game')
+        # TODO: maybe ask for confirmation from client?
 
 
 # --------------------------------------------------------------------------------------------------------------

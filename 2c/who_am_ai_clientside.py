@@ -4,6 +4,7 @@ import threading
 from display import Display
 import pygame
 from person_data_base import PersonDataBase
+from utility import limit_words_per_line
 
 
 PORT = 50_000
@@ -45,31 +46,31 @@ class WhoAmAIClient(threading.Thread):
         return to_remove_names
 
     def handle_answer_received(self, answer):
-        self.display.set_feedback(f'Het antwoord: "{answer}". Welke personen vallen weg?')
+        self.display.set_feedback(f'Het antwoord: "{answer}".\nWelke personen vallen weg?')
         persons_to_remove = self.input_provider.get_user_input()
         remove_str = ', '.join(self.handle_persons_to_remove(persons_to_remove))
-        self.display.set_feedback(f'Deze personen vallen weg: {remove_str}.')
+        self.display.set_feedback(f'Deze personen vallen weg:\n{limit_words_per_line(remove_str, 7)}.')
         self.server_connection.send_message('OK')
 
     def handle_ask_question(self):
         self.display.set_feedback('Spreek je vraag in')
         question = self.input_provider.get_user_input()
-        self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
+        self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
         while not self.input_provider.get_user_confirmation():
-            self.display.set_feedback('Ik heb het niet verzonden, spreek opnieuw in')
+            self.display.set_feedback('Ik heb het niet verzonden, spreek opnieuw in.')
             question = self.input_provider.get_user_input()
-            self.display.set_feedback(f'Ik hoorde: "{question}", wil je dit verzenden?')
+            self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
         self.display.set_feedback('Je vraag is verzonden...')
         self.server_connection.send_message(question)
 
     def handle_answer_question(self, question):
-        self.display.set_feedback(f'Vraag: {question}? Spreek je antwoord in.')
+        self.display.set_feedback(f'Vraag: {question}?\nSpreek je antwoord in.')
         answer = self.input_provider.get_user_input()
-        self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
+        self.display.set_feedback(f'Ik hoorde: "{answer}".\nWil je dat versturen?')
         while not self.input_provider.get_user_confirmation():
-            self.display.set_feedback('Het bericht is niet verstuurd, spreek opnieuw je antwoord in.')
+            self.display.set_feedback('Het bericht is niet verstuurd.\nSpreek opnieuw je antwoord in.')
             answer = self.input_provider.get_user_input()
-            self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
+            self.display.set_feedback(f'Ik hoorde: "{answer}".\nWil je dat versturen? (ja/nee)')
         self.display.set_feedback('Je antwoord is verstuurd.')
         self.server_connection.send_message(answer)
 
@@ -89,9 +90,11 @@ class WhoAmAIClient(threading.Thread):
 
         if message.startswith('WIN'):
             self.display.set_feedback('Je hebt gewonnen!')
+            self.stop()
 
         if message.startswith('LOSE'):
             self.display.set_feedback('Je hebt verloren, loser.')
+            self.stop()
 
 
 # --------------------------------------------------------------------------------------------------------------

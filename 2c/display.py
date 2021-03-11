@@ -1,5 +1,4 @@
 import pygame
-import threading
 from person_data_base import PersonDataBase
 
 
@@ -11,8 +10,8 @@ class Display:
         self.height = height
         self.display = pygame.display.set_mode((width, height))
         pygame.display.set_caption('Who Am AI?')
-        self.feedback = 'Wacht tot het spel begint...'
-        self.background = pygame.image.load('assets/background/bg.PNG')
+        self.feedback = 'Wacht tot het spel begint...\nlisten to paul wienk'
+        self.background = pygame.image.load('assets/background/bg1.PNG')
         self.font = pygame.font.Font('assets/fonts/arial.ttf', 28)
 
     def set_feedback(self, feedback: str):
@@ -66,11 +65,13 @@ class Display:
         self.display.blit(source=text, dest=text_rect)
 
     def render_feedback(self):
-        text = self.font.render(self.feedback, True, (0, 0, 0))
-        text_rect = text.get_rect()
-        text_rect.centerx = self.width * 0.33
-        text_rect.centery = self.height * 0.8
-        self.display.blit(source=text, dest=text_rect)
+        lines = self.feedback.splitlines()
+        for i, l in enumerate(lines):
+            text = self.font.render(l, True, (0, 0, 0))
+            rect = text.get_rect()
+            rect.centerx = self.width * 0.33
+            rect.centery = self.height * 0.8 + 40 * i
+            self.display.blit(text, rect)
 
     def render_background(self):
         self.display.fill(color=(200, 100, 200))
@@ -103,8 +104,8 @@ def main():
     data_base = PersonDataBase.generate_random_data_base()
     display = Display(width=1400, height=1000)
     display.set_data_base(data_base)
-    t = threading.Thread(target=add_remove_faces, args={data_base})
-    t.start()
+    # t = threading.Thread(target=add_remove_faces, args={data_base})
+    # t.start()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -116,3 +117,5 @@ def main():
 
 if __name__ == '__main__':
     exit(main())
+
+
