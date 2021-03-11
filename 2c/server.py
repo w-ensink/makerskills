@@ -26,7 +26,6 @@ class ClientConnection:
     def send_message(self, message):
         message = self.protocol.encode_text(message)
         length = self.protocol.encode_message_length_header(len(message))
-        # print(f'message: {message}, length: {length}')
         self.connection.send(length)
         self.connection.send(message)
 

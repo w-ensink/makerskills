@@ -9,9 +9,10 @@ class SpeechToText:
 
     def get_user_input(self):
         microphone = sr.Microphone()
+        print(f'microphone names: {microphone.list_microphone_names()}')
         recognizer = sr.Recognizer()
         with microphone as source:
-            recognizer.adjust_for_ambient_noise(source)
+            recognizer.adjust_for_ambient_noise(source, duration=0.6)
             audio = recognizer.listen(source)
 
         print('sending data to google')

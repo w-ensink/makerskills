@@ -55,8 +55,6 @@ def main(connection1, connection2):
 if __name__ == '__main__':
     PORT = 50_000
     IP_ADDRESS = '192.168.178.10'
-    # SERVER = socket.gethostbyname('192.168.178.10')
-    # ADDRESS = (SERVER, PORT)
     server = Server(ip_address=IP_ADDRESS, port=PORT)
 
     c1, c2 = server.wait_for_num_client_connections(num=2)

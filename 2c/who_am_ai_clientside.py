@@ -36,10 +36,19 @@ class WhoAmAIClient(threading.Thread):
         self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
 
+    def handle_persons_to_remove(self, remove_ans: str):
+        to_remove_names = []
+        for p in self.data_base.persons:
+            if p.name in remove_ans.split(' '):
+                self.data_base.make_person_invisible(p.name)
+                to_remove_names.append(p.name)
+        return to_remove_names
+
     def handle_answer_received(self, answer):
         self.display.set_feedback(f'Het antwoord: "{answer}". Welke personen vallen weg?')
-        person_to_remove = self.input_provider.get_user_input()
-        # TODO: make mechanism to remove people from display
+        persons_to_remove = self.input_provider.get_user_input()
+        remove_str = ', '.join(self.handle_persons_to_remove(persons_to_remove))
+        self.display.set_feedback(f'Deze personen vallen weg: {remove_str}.')
         self.server_connection.send_message('OK')
 
     def handle_ask_question(self):
@@ -62,7 +71,7 @@ class WhoAmAIClient(threading.Thread):
             answer = self.input_provider.get_user_input()
             self.display.set_feedback(f'Ik hoorde: "{answer}", wil je dat versturen?')
         self.display.set_feedback('Je antwoord is verstuurd.')
-        self.server_connection.send_message('RESPONSE' + answer)
+        self.server_connection.send_message(answer)
 
     def handle_next_message(self):
         message = self.server_connection.wait_for_message()
