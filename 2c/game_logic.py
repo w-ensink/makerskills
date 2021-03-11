@@ -57,9 +57,10 @@ class GameLogic:
         self.inactive_player = self.players[1]
 
         data_base = PersonDataBase.generate_random_data_base()
-        serialised_data_base = data_base.to_string()
-        self.active_player.start_game(serialised_data_base)
-        self.inactive_player.start_game(serialised_data_base)
+        data_base2 = PersonDataBase.from_string(data_base.to_string())
+        data_base2.self_person = data_base.persons[14]
+        self.active_player.start_game(data_base.to_string())
+        self.inactive_player.start_game(data_base2.to_string())
 
     def add_player(self, player):
         self.players.append(player)
