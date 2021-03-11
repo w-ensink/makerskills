@@ -93,8 +93,16 @@ class PersonDataBase:
         return db
 
     @staticmethod
+    def get_random_file_names():
+        available_file_names = []
+        available_file_names.extend([f'm_{i + 1}.png' for i in range(24)])
+        available_file_names.extend([f'f_{i + 1}.png' for i in range(24)])
+        random.shuffle(available_file_names)
+        return available_file_names[:21]
+
+    @staticmethod
     def generate_two_random_databases_with_different_self():
-        file_names = [f'm_{x * 3 + y + 1}.png' for x in range(7) for y in range(3)]
+        file_names = PersonDataBase.get_random_file_names()
         self_1 = random.choice(file_names)
         self_2 = random.choice(file_names)
         while self_1 == self_2:

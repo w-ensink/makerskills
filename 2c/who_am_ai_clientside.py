@@ -37,19 +37,33 @@ class WhoAmAIClient(threading.Thread):
         self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
 
-    def handle_persons_to_remove(self, remove_ans: str):
+    def handle_persons_to_remove(self):
+        persons_to_remove = self.input_provider.get_user_input()
         to_remove_names = []
         for p in self.data_base.persons:
-            if p.name in remove_ans.split(' '):
+            if p.name in persons_to_remove.split(' '):
                 self.data_base.make_person_invisible(p.name)
                 to_remove_names.append(p.name)
-        return to_remove_names
+        return ', '.join(to_remove_names)
+
+    def remove_all_desired_faces(self):
+        remove_str = self.handle_persons_to_remove()
+        self.display.set_feedback(f'Deze personen vallen weg:\n{limit_words_per_line(remove_str, 7)}.\n'
+                                  f'Is dat alles? (ja/nee)')
+        while not self.input_provider.get_user_confirmation():
+            self.display.set_feedback(f'Welke personen vallen nog meer weg?')
+            remove_str = self.handle_persons_to_remove()
+            self.display.set_feedback(f'Deze personen vallen weg:'
+                                      f'\n{limit_words_per_line(remove_str, 7)}.\n'
+                                      f'Is dat alles? (ja/nee)')
+        self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag...')
 
     def handle_answer_received(self, answer):
-        self.display.set_feedback(f'Het antwoord: "{answer}".\nWelke personen vallen weg?')
-        persons_to_remove = self.input_provider.get_user_input()
-        remove_str = ', '.join(self.handle_persons_to_remove(persons_to_remove))
-        self.display.set_feedback(f'Deze personen vallen weg:\n{limit_words_per_line(remove_str, 7)}.')
+        self.display.set_feedback(f'Het antwoord:\n'
+                                  f'"{limit_words_per_line(answer, 10)}".'
+                                  f'\nWelke personen vallen weg?')
+        self.remove_all_desired_faces()
+        self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag...')
         self.server_connection.send_message('OK')
 
     def handle_ask_question(self):
