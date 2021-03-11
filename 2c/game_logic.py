@@ -117,7 +117,7 @@ class MockPlayer(GameLogic.Player):
     def answer_received(self, answer):
         self.last_received_answer = answer
 
-    def start_game(self, face_ids: [str], your_id: str):
+    def start_game(self, serialized_person_data_base: str):
         self.game_started = True
 
     def handle_lost_game(self):

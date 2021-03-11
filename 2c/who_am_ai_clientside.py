@@ -8,7 +8,6 @@ from person_data_base import PersonDataBase
 
 PORT = 50_000
 IP_ADDRESS = '84.104.226.204'
-ADDRESS = (IP_ADDRESS, PORT)
 
 
 # --------------------------------------------------------------------------------------------------------------
@@ -93,7 +92,7 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
     display = Display(width=1400, height=1000)
-    server_connection = ServerConnection(ADDRESS)
+    server_connection = ServerConnection((IP_ADDRESS, PORT))
     input_provider = SpeechToText()
     who_am_ai_client = WhoAmAIClient(input_provider, server_connection, display)
     who_am_ai_client.start()

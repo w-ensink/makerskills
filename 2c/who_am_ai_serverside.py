@@ -1,5 +1,5 @@
 
-from server import ClientConnection, wait_for_two_client_connections
+from server import ClientConnection, Server
 from game_logic import GameLogic
 import threading
 
@@ -53,9 +53,14 @@ def main(connection1, connection2):
 
 
 if __name__ == '__main__':
-    c1, c2 = wait_for_two_client_connections()
+    PORT = 50_000
+    IP_ADDRESS = '192.168.178.10'
+    # SERVER = socket.gethostbyname('192.168.178.10')
+    # ADDRESS = (SERVER, PORT)
+    server = Server(ip_address=IP_ADDRESS, port=PORT)
+
+    c1, c2 = server.wait_for_num_client_connections(num=2)
     thread = threading.Thread(target=main, args=(c1, c2))
     thread.start()
     _ = input('press enter to exit')
-    c1.close()
-    c2.close()
+    server.close()

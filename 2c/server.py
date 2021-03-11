@@ -3,16 +3,7 @@ import socket
 import protocol
 
 
-PORT = 50_000
-SERVER = socket.gethostbyname('192.168.178.10')
-ADDRESS = (SERVER, PORT)
-HEADER = 64
 FORMAT = 'utf-8'
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDRESS)
-
-num_connections = 0
 
 
 class ClientConnection:
@@ -20,15 +11,9 @@ class ClientConnection:
         self.connection = connection
         self.address = address
         self.protocol = protocol.Protocol()
-        global num_connections
-        num_connections += 1
 
     def __del__(self):
         self.connection.close()
-        global server, num_connections
-        num_connections -= 1
-        if num_connections == 0:
-            server.close()
 
     def wait_for_message(self):
         length = self.connection.recv(self.protocol.get_header_size()).decode(FORMAT)
@@ -47,24 +32,39 @@ class ClientConnection:
 
     def close(self):
         self.connection.close()
+        print('closed client')
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.connection.close()
 
 
-def wait_for_two_client_connections() -> [ClientConnection, ClientConnection]:
-    server.listen()
-    client_connections = []
-    while len(client_connections) < 2:
-        connection, address = server.accept()
-        client_connections.append(ClientConnection(connection, address))
-        print('client connection made')
-    print(f'{len(client_connections)} client connections')
-    return client_connections[0], client_connections[1]
+class Server:
+    def __init__(self, ip_address, port):
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server = socket.gethostbyname(ip_address)
+        address = (server, port)
+        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.server.bind(address)
+        self.client_connections = []
+
+    def wait_for_num_client_connections(self, num):
+        self.server.listen()
+        while len(self.client_connections) < num:
+            connection, address = self.server.accept()
+            self.client_connections.append(ClientConnection(connection, address))
+            print('client connection made')
+        print(f'{num} client connections made')
+        return self.client_connections
+
+    def close(self):
+        for c in self.client_connections:
+            c.close()
+        self.server.close()
+        print('closed server')
 
 
 if __name__ == '__main__':
-    connections = wait_for_two_client_connections()
+    connections = None # wait_for_two_client_connections()
     with connections[0] as player_1, connections[1] as player_2:
         msg = player_2.wait_for_message()
         print(f'player 1: {msg}')
