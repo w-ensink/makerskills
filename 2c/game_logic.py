@@ -80,12 +80,14 @@ class GameLogic:
     def step(self) -> bool:
         question = self.active_player.provide_question()
         answer = self.inactive_player.provide_answer(question)
-        self.active_player.answer_received(answer)
+        print(f'vraag: {question}, antwoord: {answer}')
 
         if question.startswith('jij bent') or question.startswith('je bent') and answer == 'ja':
             self.active_player.handle_won_game()
             self.inactive_player.handle_lost_game()
             return False
+        else:
+            self.active_player.answer_received(answer)
 
         self.active_player, self.inactive_player = self.inactive_player, self.active_player
         return True
