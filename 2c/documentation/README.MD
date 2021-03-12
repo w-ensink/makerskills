@@ -26,4 +26,11 @@ De soorten data die ons protocol moet kunnen afhandelen, zijn:
 Van deze data typen moet het protocol binary data kunnen maken en het moet ook 
 kunnen vertellen wat voor data het is als je de binary aan het protocol geeft.
 
+---
 
+### Demo
+
+https://www.youtube.com/watch?v=Iol8jyYqFBU
+
+Eerste demo waarin de werking van de client/server communicatie zichtbaar (en hoorbaar) is.
+Deze demo is gefilmd vanuit Wouter zijn perspectief, spelend tegen Paul. Paul is ook op de achtergrond te horen.
