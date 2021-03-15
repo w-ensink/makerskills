@@ -1,7 +1,7 @@
 
 
 import speech_recognition as sr
-
+# TODO: FeedbackListener class die aangeroepen wordt wanneer input niet begrepen wordt
 
 class SpeechToText:
     def __init__(self):

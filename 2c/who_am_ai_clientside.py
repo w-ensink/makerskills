@@ -5,7 +5,7 @@ from display import Display
 import pygame
 from person_data_base import PersonDataBase
 from utility import limit_words_per_line
-
+from osc_message_sender import SoundManager
 
 PORT = 50_000
 IP_ADDRESS = '84.104.226.204'
@@ -23,6 +23,7 @@ class WhoAmAIClient(threading.Thread):
         self.data_base = None
         self.display = display
         self.keep_running = True
+        self.sound_manager = SoundManager()
 
     def stop(self):
         self.keep_running = False
@@ -36,6 +37,7 @@ class WhoAmAIClient(threading.Thread):
         self.data_base = PersonDataBase.from_string(message)
         self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
+        self.sound_manager.send_data_base(self.data_base)
 
     def handle_persons_to_remove(self):
         persons_to_remove = self.input_provider.get_user_input()
@@ -57,6 +59,7 @@ class WhoAmAIClient(threading.Thread):
                                       f'\n{limit_words_per_line(remove_str, 7)}.\n'
                                       f'Is dat alles? (ja/nee)')
         self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag...')
+        self.sound_manager.send_data_base(self.data_base)
 
     def handle_answer_received(self, answer):
         self.display.set_feedback(f'Het antwoord:\n'
