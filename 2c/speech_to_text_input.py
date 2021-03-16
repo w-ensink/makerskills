@@ -4,8 +4,18 @@ import speech_recognition as sr
 # TODO: FeedbackListener class die aangeroepen wordt wanneer input niet begrepen wordt
 
 class SpeechToText:
+    class FeedbackListener:
+        def speech_could_not_be_recognized(self):
+            pass
+
+        def speech_server_error(self):
+            pass
+
     def __init__(self):
-        pass
+        self.feedback_listeners = []
+
+    def add_feedback_listener(self, listener):
+        self.feedback_listeners.append(listener)
 
     def get_user_input(self):
         microphone = sr.Microphone()
@@ -21,9 +31,13 @@ class SpeechToText:
             return response
         except sr.RequestError:
             print('failed request')
+            for l in self.feedback_listeners:
+                l.speech_server_error()
             return self.get_user_input()
         except sr.UnknownValueError:
             print('couldnt understand that')
+            for l in self.feedback_listeners:
+                l.speech_could_not_be_recognized()
             return self.get_user_input()
 
     def get_user_confirmation(self):

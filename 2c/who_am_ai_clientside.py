@@ -15,7 +15,7 @@ IP_ADDRESS = '84.104.226.204'
 # --------------------------------------------------------------------------------------------------------------
 
 
-class WhoAmAIClient(threading.Thread):
+class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
     def __init__(self, input_provider, server_connection: ServerConnection, display: Display):
         super().__init__()
         self.server_connection = server_connection
@@ -24,6 +24,19 @@ class WhoAmAIClient(threading.Thread):
         self.display = display
         self.keep_running = True
         self.sound_manager = SoundManager()
+        self.input_provider.add_listener(self)
+
+    # from SpeechToText.FeedbackListener
+    def speech_server_error(self):
+        self.display.set_feedback('Er was een probleem met de Google server,\n'
+                                  'probeer het opnieuw.')
+        self.sound_manager.trigger_not_understand_sound()
+
+    # from SpeechToText.FeedbackListener
+    def speech_could_not_be_recognized(self):
+        self.display.set_feedback('Ik kon het niet verstaan,\n'
+                                  'probeer het opnieuw.')
+        self.sound_manager.trigger_not_understand_sound()
 
     def stop(self):
         self.keep_running = False
@@ -38,9 +51,11 @@ class WhoAmAIClient(threading.Thread):
         self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
         self.sound_manager.send_data_base(self.data_base)
+        self.sound_manager.trigger_start_sound()
 
     def handle_persons_to_remove(self):
         persons_to_remove = self.input_provider.get_user_input()
+        self.sound_manager.trigger_neutral_sound()
         to_remove_names = []
         for p in self.data_base.persons:
             if p.name in persons_to_remove.split(' '):
@@ -58,10 +73,12 @@ class WhoAmAIClient(threading.Thread):
             self.display.set_feedback(f'Deze personen vallen weg:'
                                       f'\n{limit_words_per_line(remove_str, 7)}.\n'
                                       f'Is dat alles? (ja/nee)')
+            self.sound_manager.trigger_neutral_sound()
         self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag...')
         self.sound_manager.send_data_base(self.data_base)
 
     def handle_answer_received(self, answer):
+        self.sound_manager.trigger_receive_sound()
         self.display.set_feedback(f'Het antwoord:\n'
                                   f'"{limit_words_per_line(answer, 10)}".'
                                   f'\nWelke personen vallen weg?')
@@ -71,6 +88,7 @@ class WhoAmAIClient(threading.Thread):
 
     def handle_ask_question(self):
         self.display.set_feedback('Spreek je vraag in')
+        self.sound_manager.trigger_neutral_sound()
         question = self.input_provider.get_user_input()
         self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
         while not self.input_provider.get_user_confirmation():
@@ -79,10 +97,14 @@ class WhoAmAIClient(threading.Thread):
             self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
         self.display.set_feedback('Je vraag is verzonden...')
         self.server_connection.send_message(question)
+        self.sound_manager.trigger_send_sound()
 
     def handle_answer_question(self, question):
+        self.sound_manager.trigger_receive_sound()
         self.display.set_feedback(f'Vraag: {question}?\nSpreek je antwoord in.')
+        self.sound_manager.trigger_neutral_sound()
         answer = self.input_provider.get_user_input()
+        self.sound_manager.trigger_neutral_sound()
         self.display.set_feedback(f'Ik hoorde: "{answer}".\nWil je dat versturen?')
         while not self.input_provider.get_user_confirmation():
             self.display.set_feedback('Het bericht is niet verstuurd.\nSpreek opnieuw je antwoord in.')
@@ -90,6 +112,7 @@ class WhoAmAIClient(threading.Thread):
             self.display.set_feedback(f'Ik hoorde: "{answer}".\nWil je dat versturen? (ja/nee)')
         self.display.set_feedback('Je antwoord is verstuurd.')
         self.server_connection.send_message(answer)
+        self.sound_manager.trigger_send_sound()
 
     def handle_next_message(self):
         message = self.server_connection.wait_for_message()

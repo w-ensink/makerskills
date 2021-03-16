@@ -12,9 +12,12 @@ class OSCMessageSender:
 
 
 def middle_square_method(r, g, b):
-    return (((r * g * b) ** 2.0) / 10_000.0) % 10_000.0
+    return int((((r * g * b) ** 2.0) / 10_000.0) % 10_000)
 
 
+# goed voor versturen vraag
+# fout voor niet begrijpen input
+# win en verlies geluidje
 class SoundManager:
     def __init__(self):
         self.sender = OSCMessageSender(port=6000)
@@ -33,6 +36,27 @@ class SoundManager:
                 data.append(middle_square_method(rgb[0], rgb[1], rgb[2]))
 
         self.sender.send_message('/persons', data)
+
+    def trigger_win_sound(self):
+        self.sender.send_message('/win', 1)
+
+    def trigger_lose_sound(self):
+        self.sender.send_message('/lose', 1)
+
+    def trigger_send_sound(self):
+        self.sender.send_message('/send', 1)
+
+    def trigger_receive_sound(self):
+        self.sender.send_message('/receive', 1)
+
+    def trigger_not_understand_sound(self):
+        self.sender.send_message('/doof', 1)
+
+    def trigger_neutral_sound(self):
+        self.sender.send_message('/neutral', 1)
+
+    def trigger_start_sound(self):
+        self.sender.send_message('/start', 1)
 
 
 if __name__ == '__main__':
