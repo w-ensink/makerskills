@@ -24,7 +24,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         self.display = display
         self.keep_running = True
         self.sound_manager = SoundManager()
-        self.input_provider.add_listener(self)
+        self.input_provider.add_feedback_listener(self)
 
     # from SpeechToText.FeedbackListener
     def speech_server_error(self):
