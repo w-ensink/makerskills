@@ -74,8 +74,6 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
                                       f'\n{limit_words_per_line(remove_str, 7)}.\n'
                                       f'Is dat alles? (ja/nee)')
             self.sound_manager.trigger_neutral_sound()
-        self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag...')
-        self.sound_manager.send_data_base(self.data_base)
 
     def handle_answer_received(self, answer):
         self.sound_manager.trigger_receive_sound()
@@ -83,7 +81,8 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
                                   f'"{limit_words_per_line(answer, 10)}".'
                                   f'\nWelke personen vallen weg?')
         self.remove_all_desired_faces()
-        self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag...')
+        self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag.')
+        self.sound_manager.send_data_base(self.data_base)
         self.server_connection.send_message('OK')
 
     def handle_ask_question(self):
@@ -95,7 +94,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
             self.display.set_feedback('Ik heb het niet verzonden, spreek opnieuw in.')
             question = self.input_provider.get_user_input()
             self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
-        self.display.set_feedback('Je vraag is verzonden...')
+        self.display.set_feedback('Je vraag is verzonden.')
         self.server_connection.send_message(question)
         self.sound_manager.trigger_send_sound()
 
