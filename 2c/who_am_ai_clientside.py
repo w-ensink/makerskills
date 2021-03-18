@@ -87,11 +87,10 @@ class EliminatingFacesState(State):
 
     def get_confirmation_message(self):
         if self.persons_to_remove == '':
-            return f'Ik heb geen gezichten weggehaald, is dat wat je wilde?\n' \
+            return f'Ik heb geen gezichten weggehaald, is dat wat je wilde? (ja/nee)\n' \
                    f'Vraag: "{self.question}?"\n' \
                    f'Antwoord: "{self.answer}"'
-        return f'De gezichten die ik heb weggehaald zijn:\n' \
-               f'{limit_words_per_line(self.persons_to_remove, 8)}\n' \
+        return f'{limit_words_per_line(self.persons_to_remove, 8)}\n' \
                f'Waren dit alle gezichten die je weg wil hebben? (ja/nee)\n' \
                f'Vraag: "{self.question}?"\n' \
                f'Anwoord: "{self.answer}"'
@@ -104,12 +103,11 @@ class EliminatingFacesState(State):
     def get_confirmation_error(self):
         if self.persons_to_remove == '':
             return f'Dat was geen "ja" of "nee", probeer het opnieuw.\n' \
-                   f'Ik heb geen gezichten weggehaald, is dat wat je wilde?\n' \
+                   f'Ik heb geen gezichten weggehaald, is dat wat je wilde? (ja/nee)\n' \
                    f'Vraag: "{self.question}?"\n' \
                    f'Antwoord: "{self.answer}"'
         return f'Dat was geen "ja" of "nee", probeer het opnieuw\n' \
-               f'{limit_words_per_line(self.persons_to_remove, 10)}\n' \
-               f'Waren dit alle gezichten die je weg wil hebben?\n'\
+               f'Wil je nog meer personen weghalen? (ja/nee)\n'\
                f'Vraag: "{self.question}?"\n' \
                f'Anwoord: "{self.answer}"'
 
@@ -179,6 +177,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
 
     def speech_not_confirmation_type(self):
         self.display.set_feedback(self.feedback_state.get_confirmation_error())
+        self.sound_manager.trigger_not_understand_sound()
 
     def stop(self):
         self.keep_running = False
@@ -209,7 +208,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
     def remove_all_desired_faces(self):
         self.feedback_state.persons_to_remove = self.handle_persons_to_remove()
         self.display.set_feedback(self.feedback_state.get_confirmation_message())
-
+        self.sound_manager.trigger_neutral_sound()
         while not self.input_provider.get_user_confirmation():
             self.display.set_feedback(self.feedback_state.get_feedback_after_decline())
             self.feedback_state.persons_to_remove = self.handle_persons_to_remove()
@@ -227,6 +226,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         message = 'OK' + '|'.join([str(i) for i in score_data])
         print(f'sent: {message}')
         self.server_connection.send_message(message)
+        self.sound_manager.trigger_send_sound()
 
     def handle_ask_question(self):
         self.feedback_state = AskingQuestionState()
@@ -250,7 +250,6 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         self.feedback_state = AnsweringQuestionState(question)
         self.sound_manager.trigger_receive_sound()
         self.display.set_feedback(self.feedback_state.get_default_feedback())
-        self.sound_manager.trigger_neutral_sound()
         self.feedback_state.answer = self.input_provider.get_user_input()
         self.sound_manager.trigger_neutral_sound()
         self.display.set_feedback(self.feedback_state.get_confirmation_message())
