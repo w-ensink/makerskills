@@ -18,7 +18,8 @@ class GameLogic:
     # or if it's local only, it will just be connected to the display & input directly
     class Player:
         # should provide a question that gets asked to the other player
-        def provide_question(self) -> str:
+        # and should send the data to pass on as well
+        def provide_question(self, data_to_pass_on: str) -> str:
             pass
 
         # should provide the answer to the given question (only 'ja' or 'nee')
@@ -48,6 +49,7 @@ class GameLogic:
         self.active_player: GameLogic.Player = None
         self.inactive_player: GameLogic.Player = None
         self.keep_running = True
+        self.data_to_pass_on = ''
 
     def setup(self):
         if len(self.players) != 2:
@@ -77,7 +79,7 @@ class GameLogic:
 
     # returns true if the game should continue, false if it needs to stop
     def step(self) -> bool:
-        question = self.active_player.provide_question()
+        question = self.active_player.provide_question(self.data_to_pass_on)
         answer = self.inactive_player.provide_answer(question)
         print(f'vraag: {question}, antwoord: {answer}')
 
@@ -86,7 +88,7 @@ class GameLogic:
             self.inactive_player.handle_lost_game()
             return False
         else:
-            self.active_player.answer_received(answer)
+            self.data_to_pass_on = self.active_player.answer_received(answer)
 
         self.active_player, self.inactive_player = self.inactive_player, self.active_player
         return True

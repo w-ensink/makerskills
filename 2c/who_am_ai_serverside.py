@@ -16,10 +16,9 @@ import threading
 class ClientPlayer(GameLogic.Player):
     def __init__(self, client_connection: ClientConnection):
         self.client_connection = client_connection
-        self.score_to_pass_on = ''
 
-    def provide_question(self) -> str:
-        self.client_connection.send_message('QUESTION' + self.score_to_pass_on)
+    def provide_question(self, data_to_pass_on) -> str:
+        self.client_connection.send_message('QUESTION' + data_to_pass_on)
         return self.client_connection.wait_for_message()
 
     def provide_answer(self, question: str) -> str:
@@ -30,7 +29,7 @@ class ClientPlayer(GameLogic.Player):
         self.client_connection.send_message('RESPONSE' + answer)
         client_response = self.client_connection.wait_for_message()
         if client_response.startswith('OK'):
-            self.score_to_pass_on = client_response[2:]
+            return client_response[2:]
 
     def start_game(self, serialized_person_data_base: str):
         self.client_connection.send_message('START' + serialized_person_data_base)

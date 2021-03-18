@@ -39,6 +39,9 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
                                   'probeer het opnieuw.')
         self.sound_manager.trigger_not_understand_sound()
 
+    def speech_not_confirmation_type(self):
+        self.display.set_feedback('Dat was niet ja of nee,\nprobeer het opnieuw.')
+
     def stop(self):
         self.keep_running = False
 
@@ -85,7 +88,9 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         self.remove_all_desired_faces()
         self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag.')
         score_data = self.score_manager.get_score(self.data_base)
-        self.server_connection.send_message('OK' + '|'.join(str(i) for i in score_data))
+        message = 'OK' + '|'.join([str(i) for i in score_data])
+        print(f'sent: {message}')
+        self.server_connection.send_message(message)
 
     def handle_ask_question(self):
         self.display.set_feedback('Spreek je vraag in')
@@ -121,6 +126,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
             self.handle_start_game(message[5:])
 
         if message.startswith('QUESTION'):
+            print(f'received: {message}')
             if len(message) > len('QUESTION'):
                 score_data = [int(i) for i in message[8:].split('|')]
                 self.sound_manager.send_data(score_data)

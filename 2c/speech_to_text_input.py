@@ -11,6 +11,9 @@ class SpeechToText:
         def speech_server_error(self):
             pass
 
+        def speech_not_confirmation_type(self):
+            pass
+
     def __init__(self):
         self.feedback_listeners = []
 
@@ -19,7 +22,6 @@ class SpeechToText:
 
     def get_user_input(self):
         microphone = sr.Microphone()
-        print(f'microphone names: {microphone.list_microphone_names()}')
         recognizer = sr.Recognizer()
         with microphone as source:
             recognizer.adjust_for_ambient_noise(source, duration=0.6)
@@ -44,6 +46,8 @@ class SpeechToText:
         answer = self.get_user_input()
         while answer != 'ja' and answer != 'nee':
             print(f'{answer} is niet ja of nee')
+            for l in self.feedback_listeners:
+                l.speech_not_confirmation_type()
             answer = self.get_user_input()
         return answer == 'ja'
 
