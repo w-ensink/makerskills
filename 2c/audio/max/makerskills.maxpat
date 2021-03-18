@@ -39,281 +39,6 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
-					"clipheight" : 20.0,
-					"data" : 					{
-						"clips" : [ 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\7send.mp3",
-								"filename" : "7send.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
-, 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\6receive.mp3",
-								"filename" : "6receive.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
-, 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\5win.mp3",
-								"filename" : "5win.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
-, 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\4lose.mp3",
-								"filename" : "4lose.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
-, 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\3doof.mp3",
-								"filename" : "3doof.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
-, 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\2neutral.mp3",
-								"filename" : "2neutral.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
-, 							{
-								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\1start.mp3",
-								"filename" : "1start.mp3",
-								"filekind" : "audiofile",
-								"selection" : [ 0.0, 1.0 ],
-								"loop" : 0,
-								"content_state" : 								{
-									"originallength" : [ 0.0, "ticks" ],
-									"pitchshift" : [ 1.0 ],
-									"speed" : [ 1.0 ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"basictuning" : [ 440 ],
-									"play" : [ 0 ],
-									"quality" : [ "basic" ],
-									"pitchcorrection" : [ 0 ],
-									"followglobaltempo" : [ 0 ],
-									"formant" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"timestretch" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"slurtime" : [ 0.0 ]
-								}
-
-							}
- ]
-					}
-,
-					"id" : "obj-181",
-					"maxclass" : "playlist~",
-					"numinlets" : 1,
-					"numoutlets" : 5,
-					"outlettype" : [ "signal", "signal", "signal", "", "dictionary" ],
-					"patching_rect" : [ 1517.0, 514.0, 247.0, 139.0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-176",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 1118.0, 535.0, 49.0, 22.0 ],
-					"text" : "append"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-175",
-					"maxclass" : "newobj",
-					"numinlets" : 2,
-					"numoutlets" : 2,
-					"outlettype" : [ "signal", "bang" ],
-					"patching_rect" : [ 1101.0, 709.0, 47.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"basictuning" : 440,
-						"followglobaltempo" : 0,
-						"formantcorrection" : 0,
-						"mode" : "basic",
-						"originallength" : [ 0.0, "ticks" ],
-						"originaltempo" : 120.0,
-						"pitchcorrection" : 0,
-						"quality" : "basic",
-						"timestretch" : [ 0 ]
-					}
-,
-					"text" : "sfplay~"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-174",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 1353.0, 621.5, 58.0, 22.0 ],
-					"text" : "loadbang"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-173",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 1353.0, 658.0, 29.5, 22.0 ],
-					"text" : "120"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-162",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 175.0, 14.0, 58.0, 22.0 ],
-					"text" : "loadbang"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-161",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 2,
-					"outlettype" : [ "bang", "int" ],
-					"patching_rect" : [ 292.0, 74.0, 29.5, 22.0 ],
-					"text" : "t b i"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-160",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
@@ -341,7 +66,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 78.0, 115.0, 67.0, 22.0 ],
+					"patching_rect" : [ 78.0, 56.0, 67.0, 22.0 ],
 					"text" : "s loadbang"
 				}
 
@@ -427,6 +152,7 @@
 						"tags" : "",
 						"style" : "",
 						"subpatcher_template" : "",
+						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-3",
@@ -507,7 +233,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 93.5, 397.0, 50.0, 22.0 ],
-									"text" : "51"
+									"text" : "60"
 								}
 
 							}
@@ -681,6 +407,7 @@
 						"tags" : "",
 						"style" : "",
 						"subpatcher_template" : "",
+						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"comment" : "",
@@ -714,7 +441,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 93.5, 358.0, 50.0, 22.0 ],
-									"text" : "52"
+									"text" : "62"
 								}
 
 							}
@@ -1369,7 +1096,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 201.0, 73.0, 150.0, 20.0 ],
+					"patching_rect" : [ 201.0, 14.0, 150.0, 20.0 ],
 					"text" : "clear"
 				}
 
@@ -1388,12 +1115,203 @@
 			}
 , 			{
 				"box" : 				{
+					"clipheight" : 20.0,
+					"data" : 					{
+						"clips" : [ 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\send.mp3",
+								"filename" : "send.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+, 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\receive.mp3",
+								"filename" : "receive.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+, 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\win.mp3",
+								"filename" : "win.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+, 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\lose.mp3",
+								"filename" : "lose.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+, 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\doof.mp3",
+								"filename" : "doof.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+, 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\neutral.mp3",
+								"filename" : "neutral.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+, 							{
+								"absolutepath" : "D:\\hku\\jaar2\\makerskills\\2c\\audio\\max\\sounds\\start.mp3",
+								"filename" : "start.mp3",
+								"filekind" : "audiofile",
+								"selection" : [ 0.0, 1.0 ],
+								"loop" : 0,
+								"content_state" : 								{
+									"originallength" : [ 0.0, "ticks" ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallengthms" : [ 0.0 ],
+									"basictuning" : [ 440 ],
+									"play" : [ 0 ],
+									"quality" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
+									"timestretch" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ]
+								}
+
+							}
+ ]
+					}
+,
+					"id" : "obj-47",
+					"maxclass" : "playlist~",
+					"numinlets" : 1,
+					"numoutlets" : 5,
+					"outlettype" : [ "signal", "signal", "signal", "", "dictionary" ],
+					"patching_rect" : [ 1517.0, 518.0, 262.800000000000182, 143.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-45",
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 292.0, 41.0, 29.5, 22.0 ],
+					"patching_rect" : [ 292.0, 50.0, 29.5, 22.0 ],
 					"text" : "400"
 				}
 
@@ -1406,7 +1324,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 175.0, 73.0, 24.0, 24.0 ]
+					"patching_rect" : [ 175.0, 14.0, 24.0, 24.0 ]
 				}
 
 			}
@@ -1417,7 +1335,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 853.25, 66.0, 29.5, 22.0 ],
+					"patching_rect" : [ 853.25, 62.0, 29.5, 22.0 ],
 					"text" : "0"
 				}
 
@@ -1488,7 +1406,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 292.0, 14.0, 65.0, 22.0 ],
+					"patching_rect" : [ 462.0, 14.0, 65.0, 22.0 ],
 					"text" : "r loadbang"
 				}
 
@@ -2187,7 +2105,7 @@
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 485.0, 354.0, 640.0, 480.0 ],
+						"rect" : [ -31966.0, -31966.0, 640.0, 480.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -2760,7 +2678,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 462.0, 84.0, 29.5, 22.0 ],
-					"text" : "400"
+					"text" : "310"
 				}
 
 			}
@@ -2803,13 +2721,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-12",
-					"linecount" : 10,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1704.0, 154.0, 50.0, 146.0 ],
-					"text" : "4045 6059 0 8245 8736 2555 8427 6004 2500 4041 198"
+					"patching_rect" : [ 1704.0, 154.0, 50.0, 22.0 ],
+					"text" : "4939"
 				}
 
 			}
@@ -2867,7 +2784,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1211.0, 483.0, 79.0, 22.0 ],
+					"patching_rect" : [ 1211.0, 499.0, 79.0, 22.0 ],
 					"text" : "s RGB_value"
 				}
 
@@ -2976,7 +2893,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 50.5, 281.0, 35.0, 22.0 ],
-					"text" : "0"
+					"text" : "9593"
 				}
 
 			}
@@ -2987,8 +2904,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1211.0, 154.0, 288.0, 22.0 ],
-					"text" : "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"
+					"patching_rect" : [ 1211.0, 154.0, 466.0, 22.0 ],
+					"text" : "4939 5554 8495 9593 693"
 				}
 
 			}
@@ -3581,7 +3498,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 547.0, 531.0, 50.0, 22.0 ],
-					"text" : "43"
+					"text" : "51"
 				}
 
 			}
@@ -3593,7 +3510,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 489.25, 531.0, 50.0, 22.0 ],
-					"text" : "52"
+					"text" : "60"
 				}
 
 			}
@@ -3605,7 +3522,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 430.25, 531.0, 50.0, 22.0 ],
-					"text" : "48"
+					"text" : "58"
 				}
 
 			}
@@ -3629,7 +3546,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 367.5, 531.0, 50.0, 22.0 ],
-					"text" : "48"
+					"text" : "56"
 				}
 
 			}
@@ -4216,7 +4133,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-45", 0 ],
+					"destination" : [ "obj-37", 0 ],
 					"source" : [ "obj-13", 0 ]
 				}
 
@@ -4448,53 +4365,6 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-37", 1 ],
-					"midpoints" : [ 312.0, 106.0, 350.0, 106.0, 350.0, 73.0, 482.0, 73.0 ],
-					"source" : [ "obj-161", 1 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-37", 0 ],
-					"midpoints" : [ 301.5, 106.0, 350.5, 106.0, 350.5, 73.0, 471.5, 73.0 ],
-					"source" : [ "obj-161", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-11", 0 ],
-					"order" : 0,
-					"source" : [ "obj-162", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-41", 0 ],
-					"order" : 1,
-					"source" : [ "obj-162", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-72", 0 ],
-					"source" : [ "obj-173", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-173", 0 ],
-					"source" : [ "obj-174", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-37", 1 ],
-					"midpoints" : [ 1311.0, 449.0, 1037.5, 449.0, 1037.5, 25.0, 482.0, 25.0 ],
 					"source" : [ "obj-18", 1 ]
 				}
 
@@ -4502,22 +4372,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-37", 0 ],
-					"midpoints" : [ 1300.5, 449.0, 1037.0, 449.0, 1037.0, 25.0, 471.5, 25.0 ],
 					"source" : [ "obj-18", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-72", 0 ],
-					"source" : [ "obj-181", 1 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-72", 0 ],
-					"source" : [ "obj-181", 0 ]
 				}
 
 			}
@@ -4799,6 +4654,15 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-156", 0 ],
+					"order" : 2,
+					"source" : [ "obj-41", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-45", 0 ],
+					"midpoints" : [ 184.5, 43.5, 301.5, 43.5 ],
 					"order" : 1,
 					"source" : [ "obj-41", 0 ]
 				}
@@ -4813,7 +4677,8 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-161", 0 ],
+					"destination" : [ "obj-37", 1 ],
+					"midpoints" : [ 301.5, 77.5, 482.0, 77.5 ],
 					"source" : [ "obj-45", 0 ]
 				}
 
@@ -4890,6 +4755,20 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-72", 0 ],
+					"source" : [ "obj-47", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-72", 0 ],
+					"source" : [ "obj-47", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-8", 3 ],
 					"source" : [ "obj-48", 3 ]
 				}
@@ -4919,7 +4798,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-11", 1 ],
-					"midpoints" : [ 1219.0, 106.5, 1489.5, 106.5 ],
+					"midpoints" : [ 1219.0, 106.5, 1667.5, 106.5 ],
 					"order" : 1,
 					"source" : [ "obj-5", 0 ]
 				}
@@ -4937,7 +4816,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-38", 0 ],
-					"midpoints" : [ 1369.5, 94.0, 1134.125, 94.0, 1134.125, 56.0, 862.75, 56.0 ],
+					"midpoints" : [ 1369.5, 94.0, 1134.125, 94.0, 1134.125, 51.0, 862.75, 51.0 ],
 					"order" : 1,
 					"source" : [ "obj-5", 4 ]
 				}
@@ -4946,7 +4825,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-38", 0 ],
-					"midpoints" : [ 1331.875, 94.0, 1134.9375, 94.0, 1134.9375, 56.0, 862.75, 56.0 ],
+					"midpoints" : [ 1331.875, 94.0, 1134.9375, 94.0, 1134.9375, 51.0, 862.75, 51.0 ],
 					"order" : 1,
 					"source" : [ "obj-5", 3 ]
 				}
@@ -5015,35 +4894,35 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-55", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-56", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-57", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-58", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-59", 0 ]
 				}
 
@@ -5222,14 +5101,14 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-68", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-181", 0 ],
+					"destination" : [ "obj-47", 0 ],
 					"source" : [ "obj-69", 0 ]
 				}
 
@@ -5474,49 +5353,49 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "7send.mp3",
+				"name" : "send.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "6receive.mp3",
+				"name" : "receive.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "5win.mp3",
+				"name" : "win.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "4lose.mp3",
+				"name" : "lose.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "3doof.mp3",
+				"name" : "doof.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "2neutral.mp3",
+				"name" : "neutral.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
 				"implicit" : 1
 			}
 , 			{
-				"name" : "1start.mp3",
+				"name" : "start.mp3",
 				"bootpath" : "D:/hku/jaar2/makerskills/2c/audio/max/sounds",
 				"patcherrelativepath" : "./sounds",
 				"type" : "Mp3",
