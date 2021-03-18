@@ -88,7 +88,7 @@ class EliminatingFacesState(State):
     def get_confirmation_message(self):
         if self.persons_to_remove == '':
             return f'Ik heb geen gezichten weggehaald, is dat wat je wilde?\n' \
-                   f'Vraag: "{self.question}?"' \
+                   f'Vraag: "{self.question}?"\n' \
                    f'Antwoord: "{self.answer}"'
         return f'De gezichten die ik heb weggehaald zijn:\n' \
                f'{limit_words_per_line(self.persons_to_remove, 8)}\n' \
