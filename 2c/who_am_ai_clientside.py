@@ -14,6 +14,144 @@ IP_ADDRESS = '84.104.226.204'
 # --------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------
 
+class State_:
+    unknown, eliminating_faces, asking_question, answering_question = 0, 1, 2, 3
+
+
+class State:
+    def get_recognition_error_feedback(self):
+        pass
+
+    def get_default_feedback(self):
+        pass
+
+    def get_confirmation_error(self):
+        pass
+
+    def get_confirmation_message(self):
+        pass
+
+    def get_final_feedback(self):
+        pass
+
+    def get_feedback_after_decline(self):
+        pass
+
+
+class AnsweringQuestionState(State):
+    def __init__(self, question: str):
+        self.question = question
+        self.answer = ''
+
+    def get_default_feedback(self):
+        return f'De vraag is:\n' \
+               f'"{self.question}?"\n' \
+               f'Wat is jouw antwoord?.'
+
+    def get_confirmation_message(self):
+        return f'De vraag was:\n' \
+               f'"{self.question}?"\n' \
+               f'Jouw antwoord is: "{self.answer}".\n' \
+               f'Wil je dit versturen? (ja/nee)'
+
+    def get_feedback_after_decline(self):
+        return f'Je antwoord is niet verstuurd, spreek opnieuw in.\n' \
+               f'De vraag was:\n"{self.question}?"'
+
+    def get_confirmation_error(self):
+        return f'Dat was geen "ja" of "nee".\n' \
+               f'De vraag was:\n' \
+               f'"{self.question}?"\n' \
+               f'Jouw antwoord is: "{self.answer}".\n' \
+               f'Wil je dit versturen? (ja/nee)'
+
+    def get_recognition_error_feedback(self):
+        return f'Dat kon ik niet verstaan.\n' \
+               f'Probeer opnieuw je antwoord in te spreken.\n' \
+               f'De vraag was:\n' \
+               f'"{self.question}?"'
+
+    def get_final_feedback(self):
+        return 'Je antwoord is verzonden.'
+
+
+class EliminatingFacesState(State):
+    def __init__(self, question, answer):
+        self.question, self.answer = question, answer
+        self.persons_to_remove = ''
+
+    def get_default_feedback(self):
+        return f'Je vraag was: "{self.question}?"\n' \
+               f'Het antwoord is: "{self.answer}"\n' \
+               f'Welke personen wil je weghalen?'
+
+    def get_confirmation_message(self):
+        if self.persons_to_remove == '':
+            return f'Ik heb geen gezichten weggehaald, is dat wat je wilde?\n' \
+                   f'Vraag: "{self.question}?"' \
+                   f'Antwoord: "{self.answer}"'
+        return f'De gezichten die ik heb weggehaald zijn:\n' \
+               f'{limit_words_per_line(self.persons_to_remove, 8)}\n' \
+               f'Waren dit alle gezichten die je weg wil hebben? (ja/nee)\n' \
+               f'Vraag: "{self.question}?"\n' \
+               f'Anwoord: "{self.answer}"'
+
+    def get_feedback_after_decline(self):
+        return f'Oke, welke personen vallen nog meer weg?\n' \
+               f'Vraag: "{self.question}?"\n' \
+               f'Anwoord: "{self.answer}"'
+
+    def get_confirmation_error(self):
+        if self.persons_to_remove == '':
+            return f'Dat was geen "ja" of "nee", probeer het opnieuw.\n' \
+                   f'Ik heb geen gezichten weggehaald, is dat wat je wilde?\n' \
+                   f'Vraag: "{self.question}?"\n' \
+                   f'Antwoord: "{self.answer}"'
+        return f'Dat was geen "ja" of "nee", probeer het opnieuw\n' \
+               f'{limit_words_per_line(self.persons_to_remove, 10)}\n' \
+               f'Waren dit alle gezichten die je weg wil hebben?\n'\
+               f'Vraag: "{self.question}?"\n' \
+               f'Anwoord: "{self.answer}"'
+
+    def get_recognition_error_feedback(self):
+        return f'Dat kon ik niet verstaan.\n' \
+               f'Welke gezichten wil je weg hebben?\n' \
+               f'Vraag: "{self.question}?"\n' \
+               f'Anwoord: "{self.answer}"'
+
+    def get_final_feedback(self):
+        return f'Oke, dan is het nu weer wachten op de volgende vraag.'
+
+
+class AskingQuestionState(State):
+    def __init__(self):
+        self.question = ''
+
+    def get_default_feedback(self):
+        return 'Spreek je vraag in.'
+
+    def get_confirmation_message(self):
+        return f'Ik hoorde: "{self.question}?"\n' \
+               f'Wil je dit versturen? (ja/nee)'
+
+    def get_feedback_after_decline(self):
+        return 'Je vraag is niet verstuurd.\n' \
+               'Spreek opnieuw je vraag in.'
+
+    def get_confirmation_error(self):
+        return f'Dat is geen "ja" of "nee", probeer het opnieuw.\n' \
+               f'Je vraag is:\n' \
+               f'"{self.question}"?\n' \
+               f'Wil je dit versturen?'
+
+    def get_recognition_error_feedback(self):
+        return 'Dat kon ik niet verstaan.\n' \
+               'Probeer opnieuw je vraag in te spreken.'
+
+    def get_final_feedback(self):
+        return 'Je vraag is verzonden.\n' \
+               'Nu is het wachten op het antwoord.'
+
 
 class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
     def __init__(self, input_provider, server_connection: ServerConnection, display: Display):
@@ -26,21 +164,21 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         self.sound_manager = SoundManager()
         self.input_provider.add_feedback_listener(self)
         self.score_manager = ScoreManager()
+        self.feedback_state = None
+        self.last_asked_question = ''
 
     # from SpeechToText.FeedbackListener
     def speech_server_error(self):
-        self.display.set_feedback('Er was een probleem met de Google server,\n'
-                                  'probeer het opnieuw.')
+        self.display.set_feedback(self.feedback_state.get_recognition_error_feedback())
         self.sound_manager.trigger_not_understand_sound()
 
     # from SpeechToText.FeedbackListener
     def speech_could_not_be_recognized(self):
-        self.display.set_feedback('Ik kon het niet verstaan,\n'
-                                  'probeer het opnieuw.')
+        self.display.set_feedback(self.feedback_state.get_recognition_error_feedback())
         self.sound_manager.trigger_not_understand_sound()
 
     def speech_not_confirmation_type(self):
-        self.display.set_feedback('Dat was niet ja of nee,\nprobeer het opnieuw.')
+        self.display.set_feedback(self.feedback_state.get_confirmation_error())
 
     def stop(self):
         self.keep_running = False
@@ -69,55 +207,62 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         return ', '.join(to_remove_names)
 
     def remove_all_desired_faces(self):
-        remove_str = self.handle_persons_to_remove()
-        self.display.set_feedback(f'Deze personen vallen weg:\n{limit_words_per_line(remove_str, 7)}.\n'
-                                  f'Is dat alles? (ja/nee)')
+        self.feedback_state.persons_to_remove = self.handle_persons_to_remove()
+        self.display.set_feedback(self.feedback_state.get_confirmation_message())
+
         while not self.input_provider.get_user_confirmation():
-            self.display.set_feedback(f'Welke personen vallen nog meer weg?')
-            remove_str = self.handle_persons_to_remove()
-            self.display.set_feedback(f'Deze personen vallen weg:'
-                                      f'\n{limit_words_per_line(remove_str, 7)}.\n'
-                                      f'Is dat alles? (ja/nee)')
+            self.display.set_feedback(self.feedback_state.get_feedback_after_decline())
+            self.feedback_state.persons_to_remove = self.handle_persons_to_remove()
+            self.display.set_feedback(self.feedback_state.get_confirmation_message())
             self.sound_manager.trigger_neutral_sound()
 
     def handle_answer_received(self, answer):
+        self.feedback_state = EliminatingFacesState(answer=answer,
+                                                    question=self.last_asked_question)
         self.sound_manager.trigger_receive_sound()
-        self.display.set_feedback(f'Het antwoord:\n'
-                                  f'"{limit_words_per_line(answer, 10)}".'
-                                  f'\nWelke personen vallen weg?')
+        self.display.set_feedback(self.feedback_state.get_default_feedback())
         self.remove_all_desired_faces()
-        self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag.')
+        self.display.set_feedback(self.feedback_state.get_final_feedback())
         score_data = self.score_manager.get_score(self.data_base)
         message = 'OK' + '|'.join([str(i) for i in score_data])
         print(f'sent: {message}')
         self.server_connection.send_message(message)
 
     def handle_ask_question(self):
-        self.display.set_feedback('Spreek je vraag in')
+        self.feedback_state = AskingQuestionState()
+        self.display.set_feedback(self.feedback_state.get_default_feedback())
         self.sound_manager.trigger_neutral_sound()
-        question = self.input_provider.get_user_input()
-        self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
+        self.feedback_state.question = self.input_provider.get_user_input()
+        self.display.set_feedback(self.feedback_state.get_confirmation_message())
+
         while not self.input_provider.get_user_confirmation():
-            self.display.set_feedback('Ik heb het niet verzonden, spreek opnieuw in.')
-            question = self.input_provider.get_user_input()
-            self.display.set_feedback(f'Ik hoorde: "{question}"\nWil je dit verzenden?')
-        self.display.set_feedback('Je vraag is verzonden.')
-        self.server_connection.send_message(question)
+            self.display.set_feedback(self.feedback_state.get_feedback_after_decline())
+            self.feedback_state.question = self.input_provider.get_user_input()
+            self.display.set_feedback(self.feedback_state.get_confirmation_message())
+            self.sound_manager.trigger_neutral_sound()
+
+        self.display.set_feedback(self.feedback_state.get_final_feedback())
+        self.server_connection.send_message(self.feedback_state.question)
+        self.last_asked_question = self.feedback_state.question
         self.sound_manager.trigger_send_sound()
 
     def handle_answer_question(self, question):
+        self.feedback_state = AnsweringQuestionState(question)
         self.sound_manager.trigger_receive_sound()
-        self.display.set_feedback(f'Vraag: {question}?\nSpreek je antwoord in.')
+        self.display.set_feedback(self.feedback_state.get_default_feedback())
         self.sound_manager.trigger_neutral_sound()
-        answer = self.input_provider.get_user_input()
+        self.feedback_state.answer = self.input_provider.get_user_input()
         self.sound_manager.trigger_neutral_sound()
-        self.display.set_feedback(f'Ik hoorde: "{answer}".\nWil je dat versturen?')
+        self.display.set_feedback(self.feedback_state.get_confirmation_message())
+
         while not self.input_provider.get_user_confirmation():
-            self.display.set_feedback('Het bericht is niet verstuurd.\nSpreek opnieuw je antwoord in.')
-            answer = self.input_provider.get_user_input()
-            self.display.set_feedback(f'Ik hoorde: "{answer}".\nWil je dat versturen? (ja/nee)')
-        self.display.set_feedback('Je antwoord is verstuurd.')
-        self.server_connection.send_message(answer)
+            self.display.set_feedback(self.feedback_state.get_feedback_after_decline())
+            self.feedback_state.answer = self.input_provider.get_user_input()
+            self.display.set_feedback(self.feedback_state.get_confirmation_message())
+            self.sound_manager.trigger_neutral_sound()
+
+        self.display.set_feedback(self.feedback_state.get_final_feedback())
+        self.server_connection.send_message(self.feedback_state.answer)
         self.sound_manager.trigger_send_sound()
 
     def handle_next_message(self):
@@ -130,10 +275,12 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
             if len(message) > len('QUESTION'):
                 score_data = [int(i) for i in message[8:].split('|')]
                 self.sound_manager.send_data(score_data)
+            self.feedback_state = AskingQuestionState()
             self.handle_ask_question()
 
         if message.startswith('ANSWER'):
-            self.handle_answer_question(message[6:])
+            question = message[6:]
+            self.handle_answer_question(question)
 
         if message.startswith('RESPONSE'):
             self.handle_answer_received(message[8:])
