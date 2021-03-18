@@ -5,7 +5,7 @@ from display import Display
 import pygame
 from person_data_base import PersonDataBase
 from utility import limit_words_per_line
-from osc_message_sender import SoundManager
+from osc_message_sender import SoundManager, ScoreManager
 
 PORT = 50_000
 IP_ADDRESS = '84.104.226.204'
@@ -25,6 +25,7 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         self.keep_running = True
         self.sound_manager = SoundManager()
         self.input_provider.add_feedback_listener(self)
+        self.score_manager = ScoreManager()
 
     # from SpeechToText.FeedbackListener
     def speech_server_error(self):
@@ -50,7 +51,8 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
         self.data_base = PersonDataBase.from_string(message)
         self.display.set_data_base(self.data_base)
         self.display.set_feedback('Wacht op de andere speler')
-        self.sound_manager.send_data_base(self.data_base)
+        score_data = self.score_manager.get_score(self.data_base)
+        self.sound_manager.send_data(score_data)
         self.sound_manager.trigger_start_sound()
 
     def handle_persons_to_remove(self):
@@ -82,8 +84,8 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
                                   f'\nWelke personen vallen weg?')
         self.remove_all_desired_faces()
         self.display.set_feedback('Oke, dan is het nu weer wachten\nop de volgende vraag.')
-        self.sound_manager.send_data_base(self.data_base)
-        self.server_connection.send_message('OK')
+        score_data = self.score_manager.get_score(self.data_base)
+        self.server_connection.send_message('OK' + '|'.join(score_data))
 
     def handle_ask_question(self):
         self.display.set_feedback('Spreek je vraag in')
@@ -119,6 +121,9 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
             self.handle_start_game(message[5:])
 
         if message.startswith('QUESTION'):
+            if len(message) > len('QUESTION'):
+                score_data = [int(i) for i in message[8:].split('|')]
+                self.sound_manager.send_data(score_data)
             self.handle_ask_question()
 
         if message.startswith('ANSWER'):
@@ -129,10 +134,12 @@ class WhoAmAIClient(threading.Thread, SpeechToText.FeedbackListener):
 
         if message.startswith('WIN'):
             self.display.set_feedback('Je hebt gewonnen!')
+            self.sound_manager.trigger_win_sound()
             self.stop()
 
         if message.startswith('LOSE'):
             self.display.set_feedback('Je hebt verloren, loser.')
+            self.sound_manager.trigger_lose_sound()
             self.stop()
 
 

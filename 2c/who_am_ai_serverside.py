@@ -16,9 +16,10 @@ import threading
 class ClientPlayer(GameLogic.Player):
     def __init__(self, client_connection: ClientConnection):
         self.client_connection = client_connection
+        self.score_to_pass_on = ''
 
     def provide_question(self) -> str:
-        self.client_connection.send_message('QUESTION')
+        self.client_connection.send_message('QUESTION' + self.score_to_pass_on)
         return self.client_connection.wait_for_message()
 
     def provide_answer(self, question: str) -> str:
@@ -27,8 +28,9 @@ class ClientPlayer(GameLogic.Player):
 
     def answer_received(self, answer: str):
         self.client_connection.send_message('RESPONSE' + answer)
-        if self.client_connection.wait_for_message() == 'OK':
-            return
+        client_response = self.client_connection.wait_for_message()
+        if client_response.startswith('OK'):
+            self.score_to_pass_on = client_response[2:]
 
     def start_game(self, serialized_person_data_base: str):
         self.client_connection.send_message('START' + serialized_person_data_base)
@@ -37,11 +39,13 @@ class ClientPlayer(GameLogic.Player):
         self.client_connection.send_message('WIN')
         print('handle won game')
         # TODO: maybe ask for confirmation from client?
+        self.client_connection.close()
 
     def handle_lost_game(self):
         self.client_connection.send_message('LOSE')
         print('handle lost game')
         # TODO: maybe ask for confirmation from client?
+        self.client_connection.close()
 
 
 # --------------------------------------------------------------------------------------------------------------

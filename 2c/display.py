@@ -10,7 +10,7 @@ class Display:
         self.height = height
         self.display = pygame.display.set_mode((width, height))
         pygame.display.set_caption('Who Am AI?')
-        self.feedback = 'Wacht tot het spel begint...\nlisten to paul wienk'
+        self.feedback = 'Wacht tot het spel begint...'
         self.background = pygame.image.load('assets/background/bg1.PNG')
         self.font = pygame.font.Font('assets/fonts/arial.ttf', 28)
 
@@ -101,7 +101,7 @@ def add_remove_faces(data_base: PersonDataBase):
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    data_base = PersonDataBase.generate_random_data_base()
+    data_base, _ = PersonDataBase.generate_two_random_databases_with_different_self()
     display = Display(width=1400, height=1000)
     display.set_data_base(data_base)
     # t = threading.Thread(target=add_remove_faces, args={data_base})

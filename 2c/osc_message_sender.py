@@ -15,26 +15,31 @@ def middle_square_method(r, g, b):
     return int((((r * g * b) ** 2.0) / 10_000.0) % 10_000)
 
 
-# goed voor versturen vraag
-# fout voor niet begrijpen input
-# win en verlies geluidje
-class SoundManager:
+class ScoreManager:
     def __init__(self):
-        self.sender = OSCMessageSender(port=6000)
         with open('game/face_values.json') as f:
             self.colors = json.loads(f.read())
 
         with open('assets/names.json') as f:
             self.names = json.loads(f.read())
 
-    def send_data_base(self, data_base: PersonDataBase):
+    def get_score(self, data_base: PersonDataBase):
         data = []
         active_persons = [p.name for p in data_base.persons if p.is_shown]
         for fn, name in self.names.items():
             if name in active_persons:
                 rgb = self.colors[fn]
                 data.append(middle_square_method(rgb[0], rgb[1], rgb[2]))
+        return data
 
+# goed voor versturen vraag
+# fout voor niet begrijpen input
+# win en verlies geluidje
+class SoundManager:
+    def __init__(self):
+        self.sender = OSCMessageSender(port=6000)
+
+    def send_data(self, data):
         self.sender.send_message('/persons', data)
 
     def trigger_win_sound(self):
@@ -62,4 +67,4 @@ class SoundManager:
 if __name__ == '__main__':
     sm = SoundManager()
     db = PersonDataBase.generate_random_data_base()
-    sm.send_data_base(db)
+    # sm.send_data_base(db)
