@@ -1,6 +1,6 @@
 import pygame
 from person_data_base import PersonDataBase
-
+import random
 
 class Display:
     def __init__(self, width: int, height: int):
@@ -98,14 +98,23 @@ def add_remove_faces(data_base: PersonDataBase):
     input('enter to stop')
 
 
+def eliminate_random_faces(data_base):
+    random.shuffle(data_base.persons)
+    for i, p in enumerate(data_base.persons):
+        p.is_shown = False
+        if i == 16:
+            return
+
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
     data_base, _ = PersonDataBase.generate_two_random_databases_with_different_self()
     display = Display(width=1400, height=1000)
+    eliminate_random_faces(data_base)
     display.set_data_base(data_base)
-    # t = threading.Thread(target=add_remove_faces, args={data_base})
-    # t.start()
+    display.set_feedback('')
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

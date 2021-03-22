@@ -14,9 +14,6 @@ IP_ADDRESS = '84.104.226.204'
 # --------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------
 
-class State_:
-    unknown, eliminating_faces, asking_question, answering_question = 0, 1, 2, 3
-
 
 class State:
     def get_recognition_error_feedback(self):
@@ -44,8 +41,7 @@ class AnsweringQuestionState(State):
         self.answer = ''
 
     def get_default_feedback(self):
-        return f'De vraag is:\n' \
-               f'"{self.question}?"\n' \
+        return f'{self.question}?\n' \
                f'Wat is jouw antwoord?.'
 
     def get_confirmation_message(self):
