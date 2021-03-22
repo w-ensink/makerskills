@@ -55,19 +55,19 @@ een behapbare, functionele functie:
 import speech_recognition as sr
 
 def get_speech_input_as_text():
-        microphone = sr.Microphone()
-        recognizer = sr.Recognizer()
-        
-        with microphone as source:
-            recognizer.adjust_for_ambient_noise(source)
-            audio = recognizer.listen(source)
+    microphone = sr.Microphone()
+    recognizer = sr.Recognizer()
+    
+    with microphone as source:
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
 
-        try:
-            return recognizer.recognize_google(audio)
-        except sr.RequestError:
-            return ''
-        except sr.UnknownValueError:
-            return ''
+    try:
+        return recognizer.recognize_google(audio)
+    except sr.RequestError:
+        return ''
+    except sr.UnknownValueError:
+        return ''
 ```
 Als je deze functie aanroept, kun je je verhaal in het Engels inspreken,
 waarna je (na even wachte) dit verhaal als tekst terugkrijgt.
@@ -86,19 +86,19 @@ De nieuwe versie van de functie hierboven die Nederlands begrijpt, ziet er dan z
 import speech_recognition as sr
 
 def get_speech_input_as_text():
-        microphone = sr.Microphone()
-        recognizer = sr.Recognizer()
-        
-        with microphone as source:
-            recognizer.adjust_for_ambient_noise(source)
-            audio = recognizer.listen(source)
+    microphone = sr.Microphone()
+    recognizer = sr.Recognizer()
+    
+    with microphone as source:
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
 
-        try:
-            return recognizer.recognize_google(audio, language='nl-NL')
-        except sr.RequestError:
-            return ''
-        except sr.UnknownValueError:
-            return ''
+    try:
+        return recognizer.recognize_google(audio, language='nl-NL')
+    except sr.RequestError:
+        return ''
+    except sr.UnknownValueError:
+        return ''
 ```
 
 ### Nu in een abstractie die bruikbaar is voor onze game
