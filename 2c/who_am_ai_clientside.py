@@ -139,8 +139,7 @@ class AskingQuestionState(State):
                f'Wil je dit versturen?'
 
     def get_recognition_error_feedback(self):
-        return 'Dat kon ik niet verstaan.\n' \
-               'Probeer opnieuw je vraag in te spreken.'
+        return 'Dat kon ik niet verstaan.'
 
     def get_final_feedback(self):
         return 'Je vraag is verzonden.\n' \
