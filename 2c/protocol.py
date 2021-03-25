@@ -8,6 +8,9 @@ class Protocol:
         message = header + binary
         return message
 
+    def get_format(self):
+        return 'utf-8'
+
     def decode_text(self, binary):
         return str(binary)[4:]
 

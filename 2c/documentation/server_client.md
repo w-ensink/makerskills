@@ -27,8 +27,71 @@ Wat ons het meest heeft geholpen is [deze Youtube video](https://www.youtube.com
 Om dit stappenplan te kunnen volgen, heb je Python3 nodig. De sockets module die we gebruiken, wordt meegeleverd in de 
 standard library van Python, dus deze hoeft niet los geinstalleerd te worden. 
 
-### Eerste test
-Als eerste test hebben we een simpele connectie gemaakt tussen 1 server en 1 client.
+### Port forwarding
+Om via internet connectie te maken met andere computers, moet je gebruik maken van port forwarding.
+Je computer is standaard van de buitenwereld afgeschermd door je router.
+Om toch je computer bereikbaar te maken, kun je port forwarding gebruiken. 
+De buitenwereld (die niet is aangesloten op jouw router/wifinetwerk), kan enkel jouw router
+bereiken via diens IP address. Dit IP address ziet er ongeveer zo uit: ```84.104.226.201``` 
+waarbij de cijfers natuurlijk verschillen per router. 
+
+Je server maakt verbinding met je router. 
+In het lokale netwerk heeft je server dan een lokaal IP address.
+Dit ziet er meestal ongeveer zo uit: ```192.168.178.10``` 
+waarbij de cijfers achter laatste punt verschillen per apparaat in je netwerk.
+
+Als je een TCP-verbinding maakt, gaat dat altijd via een bepaalde poort. In de instellingen van je router
+kun je ervoor kiezen om bepaalde poorten door te verbinden met een lokaal IP address. 
+Zo kun je bijvoorbeeld kiezen om poort ```5000``` van IP ```84.104.226.201``` 
+door te sturen naar poort ```4000``` van het lokale IP ```192.168.178.10```.
+
+Op deze manier kan een client buiten jouw lokale netwerk verbinding maken met poort ```5000``` en IP ```84.104.226.201```
+en kun je deze client bedienen met je server met het lokale IP ```192.168.178.10``` op poort ```4000```.
+
+---
+### Eerste test: één client 
+Deze code komt van [deze tutorial](https://realpython.com/python-sockets/).
+
+Client:
+```python
+import socket
+import time
+
+HOST = '84.104.226.201'  # The server's hostname or IP address
+PORT = 50_000  # The port used by the server
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect((HOST, PORT))
+    while True:
+        s.sendall(b'Hello, world')
+        data = s.recv(1024)
+        print('Received', repr(data))
+        time.sleep(0.1)
+```
+
+Server:
+```python
+import socket
+
+HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
+PORT = 50_000        # Port to listen on (non-privileged ports are > 1023)
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((HOST, PORT))
+    s.listen()
+    conn, addr = s.accept()
+    with conn:
+        print('Connected by', addr)
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            conn.sendall(data)
+```
+
+---
+### Tweede test: meerdere clients
+Als tweede test hebben we een simpele connectie gemaakt tussen 1 server en meerdere clients.
 Dit hebben we gedaan met code van [techwithtim.net](https://www.techwithtim.net/tutorials/socket-programming/)
 
 De client code ziet er zo uit:
@@ -62,7 +125,7 @@ send("Hello Tim!")
 
 send(DISCONNECT_MESSAGE)
 ```
-
+---
 De server code ziet er zo uit:
 ```python
 import socket 
@@ -108,4 +171,119 @@ def start():
 
 print("[STARTING] server is starting...")
 start()
+```
+---
+### Uiteindelijke abstracties
+```python
+class Protocol:
+    def encode_text(self, text):
+        binary = text.encode('utf-8')
+        header = b'txt_'
+        message = header + binary
+        return message
+    
+    def get_format(self):
+        return 'utf-8'
+
+    def decode_text(self, binary):
+        return str(binary)[4:]
+
+    def is_encoded_text(self, binary):
+        return binary[:4] == b'txt_'
+
+    def get_header_size(self):
+        return 64
+
+    def encode_message_length_header(self, length):
+        length = str(length).encode('utf-8')
+        length += b' ' * (self.get_header_size() - len(length))
+        return length
+```
+
+
+Voor je client hebben we de class ServerConnection gemaakt.
+```python
+import socket
+import protocol
+
+class ServerConnection:
+    def __init__(self, address):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(address)
+        self.protocol = protocol.Protocol()
+
+    def close(self):
+        self.client.close()
+
+    def send_message(self, message):
+        encoded_msg = self.protocol.encode_text(message)
+        length = self.protocol.encode_message_length_header(len(encoded_msg))
+        self.client.send(length)
+        self.client.send(encoded_msg)
+
+    def wait_for_message(self):
+        length = self.client.recv(self.protocol.get_header_size()).decode(self.protocol.get_format())
+        if length:
+            length = int(length)
+            message = self.client.recv(length).decode(self.protocol.get_format())
+            message = self.protocol.decode_text(message)
+            return message
+```
+
+Voor de server hebben we de ClientConnection gemaakt.
+
+```python
+import socket
+import protocol
+
+class ClientConnection:
+    def __init__(self, connection, address):
+        self.connection = connection
+        self.address = address
+        self.protocol = protocol.Protocol()
+
+    def __del__(self):
+        self.connection.close()
+
+    def wait_for_message(self):
+        length = self.connection.recv(self.protocol.get_header_size()).decode(self.protocol.get_format())
+        if length:
+            length = int(length)
+            message = self.connection.recv(length).decode(self.protocol.get_format())
+            message = self.protocol.decode_text(message)
+            return message
+
+    def send_message(self, message):
+        message = self.protocol.encode_text(message)
+        length = self.protocol.encode_message_length_header(len(message))
+        self.connection.send(length)
+        self.connection.send(message)
+
+    def close(self):
+        self.connection.close()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
+
+
+class Server:
+    def __init__(self, ip_address, port):
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server = socket.gethostbyname(ip_address)
+        address = (server, port)
+        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.server.bind(address)
+        self.client_connections = []
+
+    def wait_for_num_client_connections(self, num):
+        self.server.listen()
+        while len(self.client_connections) < num:
+            connection, address = self.server.accept()
+            self.client_connections.append(ClientConnection(connection, address))
+        return self.client_connections
+
+    def close(self):
+        for c in self.client_connections:
+            c.close()
+        self.server.close()
 ```
