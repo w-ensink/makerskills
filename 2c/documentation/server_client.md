@@ -174,6 +174,10 @@ start()
 ```
 ---
 ### Uiteindelijke abstracties
+De client en server communiceren met elkaar via een protocol. 
+Om te zorgen dat beide kanten dezelfde taal spreken, hebben we hier een class van gemaakt die 
+in aan beiden kanten wordt gebruikt. Deze class is verantwoordelijk voor het encoden en decoden van berichten.
+
 ```python
 class Protocol:
     def encode_text(self, text):
@@ -202,6 +206,9 @@ class Protocol:
 
 
 Voor je client hebben we de class ServerConnection gemaakt.
+Alles wat we voor ons spel nodig hebben, is het sturen en ontvangen van berichten. 
+Met de functie ```send_message(message)``` wordt een bericht naar de server verstuurd en met de functie
+```wait_for_message()``` wordt er gewacht tot de server een bericht terugstuurt.
 ```python
 import socket
 import protocol
@@ -230,7 +237,13 @@ class ServerConnection:
             return message
 ```
 
-Voor de server hebben we de ClientConnection gemaakt.
+Voor de server hebben we de classes ```Server``` en ```ClientConnection``` gemaakt.
+```Server``` is de server (duhh). Deze kun je instrueren om een x aantal ```ClientConnection```s
+te maken op gegeven poort en IP address. Wanneer de gewenste hoeveelheid connecties is gemaakt, 
+stuurt hij deze in een lijst terug. Deze zijn dan verder individueel te gebruiken. 
+Deze connecties zijn eigenlijk op exact dezelfde manier te gebruiken als de ```ServerConnection``` class.
+```send_message(message)``` stuurt een bericht naar de des betreffende client en ```wait_for_message()```
+wacht tot de betreffende client een bericht terug heeft gestuurd.
 
 ```python
 import socket
@@ -241,9 +254,6 @@ class ClientConnection:
         self.connection = connection
         self.address = address
         self.protocol = protocol.Protocol()
-
-    def __del__(self):
-        self.connection.close()
 
     def wait_for_message(self):
         length = self.connection.recv(self.protocol.get_header_size()).decode(self.protocol.get_format())
@@ -260,9 +270,6 @@ class ClientConnection:
         self.connection.send(message)
 
     def close(self):
-        self.connection.close()
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
         self.connection.close()
 
 
