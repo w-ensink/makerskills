@@ -209,9 +209,11 @@ Voor je client hebben we de class ServerConnection gemaakt.
 Alles wat we voor ons spel nodig hebben, is het sturen en ontvangen van berichten. 
 Met de functie ```send_message(message)``` wordt een bericht naar de server verstuurd en met de functie
 ```wait_for_message()``` wordt er gewacht tot de server een bericht terugstuurt.
+
 ```python
 import socket
-import protocol
+from source import protocol
+
 
 class ServerConnection:
     def __init__(self, address):
