@@ -40,4 +40,16 @@ Er klinkt ook muziek. Deze muziek is een simpele waltz in majeur die wordt gegen
 
 Wanneer er minder dan 10 gezichten over zijn, schakelt de toonsoort over naar mineur en versnelt het tempo iedere keer wanneer er steeds minder over zijn. Dit zorgt steeds voor een moment van realisatie dat jouw tegenstander steeds dichterbij jouw identiteit is, wat het spel steeds spannender maakt, omdat je dan zelf ook wellicht risico’s moet nemen in jouw vragen.
 
+---
+# Concept & doel
 
+Zoals de persona al duidelijk maakte, is onze doelgroep een persoon die van gezelschapsspelletjes houdt, maar door corona beperkt is in het zien van mensen, waardoor deze spelletjes minder snel kunnen worden gespeeld.
+Daarom een online versie, zodat deze mensen nog steeds met hun vrienden/familie kunnen spelen. 
+De keuze voor de achtergrond en de makkelijke UI is ook gebaseerd op onze persona, namelijk een oudere vrouw die niet heel veel snapt van computers. 
+Door het spel overzichtelijk te maken, blijft alleen de lol nog over! 
+
+Door ook simpele muziek toe te voegen, blijft dit idee van eenvoud en kinderlijkheid bewaard. De klank is een simpele piano, geïnspireerd door het idee van piano spelen als een kind, terwijl je vader je begeleid. 
+Soms heel lief en kloppend, soms dissonant en wringend. Zoals hierboven al genoemd, is het doel van de muziek om jou te informeren over de staat van je tegenstander. De muziek gaat steeds sneller naarmate er minder gezichten overblijven bij je tegenstander.
+Hoe ga je hier mee om? Ga je eerder gokken omdat je tegenstander al dichtbij het antwoord is? Of ga je meer risico's nemen in de vragen?
+
+Dit alles zorgt voor een gezellig, makkelijk en spannend spel, voor jong en oud!
