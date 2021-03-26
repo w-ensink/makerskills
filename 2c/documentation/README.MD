@@ -53,3 +53,23 @@ Soms heel lief en kloppend, soms dissonant en wringend. Zoals hierboven al genoe
 Hoe ga je hier mee om? Ga je eerder gokken omdat je tegenstander al dichtbij het antwoord is? Of ga je meer risico's nemen in de vragen?
 
 Dit alles zorgt voor een gezellig, makkelijk en spannend spel, voor jong en oud!
+
+---
+# Bronvermelding
+
+**Achtergrondfoto spel:**
+
+https://pressstart.vip/assets
+
+**Geluid:**
+
+Max/Msp
+
+
+**Spel:**
+
+Python (PyGame)
+
+**Gezichten:**
+
+https://thispersondoesnotexist.com/
